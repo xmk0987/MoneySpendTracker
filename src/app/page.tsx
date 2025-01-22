@@ -1,4 +1,4 @@
-import CsvUploadMapper from "./components/CSVUploader";
+import CsvUploadMapper from "../components/CSVUploader";
 
 export default function Home() {
   return (

@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { NextApiRequest, NextApiResponse } from "next";
 import formidable from "formidable";
-import { processCsvFile } from "@/app/services/csvProcessor";
+import { processCsvFile } from "@/services/csvProcessor";
 import type { CSVMapping } from "@/models/csv";
-import { CsvData } from "@/app/services/csvProcessor";
+import { CsvData } from "@/services/csvProcessor";
 
 export const config = {
   api: {
@@ -20,6 +20,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData>
 ) {
+  console.log("Arrives");
   if (req.method !== "POST") {
     res.status(405).json({ message: "Method not allowed" });
     return;

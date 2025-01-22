@@ -95,6 +95,7 @@ const CsvUploadMapper: React.FC = () => {
     }
   };
 
+  console.log(csvFile);
   return (
     <div className="flex flex-col gap-8">
       <h1 className="text-2xl font-bold">Upload and Map CSV File</h1>
