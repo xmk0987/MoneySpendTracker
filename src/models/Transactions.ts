@@ -13,27 +13,29 @@ export default class Transactions {
     return this.transactions.length;
   }
 
-  // Sum of all transaction totals.
+  // Sum of all spending transactions (negative values).
   getTotalSpend(): number {
-    return this.transactions.reduce((acc, tx) => {
-      // Assuming negative values represent spending.
+    const total = this.transactions.reduce((acc, tx) => {
       const amount = tx.total;
       return amount < 0 ? acc + Math.abs(amount) : acc;
     }, 0);
+    return Number(total.toFixed(2));
   }
 
-  // Sum of all positive (received) transactions.
+  // Sum of all received (positive) transactions.
   getTotalReceived(): number {
-    return this.transactions.reduce((acc, tx) => {
+    const total = this.transactions.reduce((acc, tx) => {
       const amount = tx.total;
       return amount > 0 ? acc + amount : acc;
     }, 0);
+    return Number(total.toFixed(2));
   }
 
-  // Monthly aggregation example.
+  // Group transactions by year-month (based on dateCreated)
+  // and compute monthly aggregates with values rounded to 2 decimals.
   getMonthlyBudgets(): Record<string, { spend: number; received: number }> {
-    return this.transactions.reduce((acc, tx) => {
-      // Use the transaction date (e.g., dateCreated) and group by YYYY-MM.
+    const budgets = this.transactions.reduce((acc, tx) => {
+      // Group by the year and month of dateCreated.
       const date = tx.dateCreated;
       const key = `${date.getFullYear()}-${(date.getMonth() + 1)
         .toString()
@@ -49,5 +51,12 @@ export default class Transactions {
       }
       return acc;
     }, {} as Record<string, { spend: number; received: number }>);
+
+    // Round each monthly aggregated value to two decimals.
+    for (const key in budgets) {
+      budgets[key].spend = Number(budgets[key].spend.toFixed(2));
+      budgets[key].received = Number(budgets[key].received.toFixed(2));
+    }
+    return budgets;
   }
 }

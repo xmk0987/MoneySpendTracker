@@ -1,31 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { NextApiRequest, NextApiResponse } from "next";
 import formidable from "formidable";
+import type { NextApiRequest, NextApiResponse } from "next";
 import { processCsvFile } from "@/services/csvProcessor";
-import type { CSVMapping } from "@/models/csv";
-import { CsvData } from "@/services/csvProcessor";
+import type { CSVMapping } from "@/models/types";
 
+// Disable body parser for file uploads
 export const config = {
   api: {
     bodyParser: false,
   },
 };
 
-type ResponseData = {
-  message: string;
-  data?: CsvData;
-};
-
-export default async function handler(
+export async function handlePostCsv(
   req: NextApiRequest,
-  res: NextApiResponse<ResponseData>
-) {
-  console.log("Arrives");
-  if (req.method !== "POST") {
-    res.status(405).json({ message: "Method not allowed" });
-    return;
-  }
-
+  res: NextApiResponse
+): Promise<void> {
   const form = formidable({});
 
   const parseForm = (): Promise<{
@@ -55,14 +44,17 @@ export default async function handler(
       : uploadedFile;
     const filePath = fileObj.filepath;
 
-    const { transactions, summary } = await processCsvFile(filePath, mapping);
+    const { transactions, summary, transactionsDataId } = await processCsvFile(
+      filePath,
+      mapping
+    );
 
     res.status(200).json({
       message: "CSV processed successfully!",
-      data: { transactions, summary },
+      data: { transactions, summary, transactionsDataId },
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("Error processing form data:", err);
-    res.status(err.httpCode || 400).json({ message: String(err) });
+    res.status(500).json({ message: "Internal server error" });
   }
 }

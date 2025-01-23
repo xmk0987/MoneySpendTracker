@@ -1,28 +1,20 @@
+"use server";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // src/services/csvProcessor.ts
 import fs from "fs";
 import * as Papa from "papaparse";
 import Transaction from "@/models/Transaction";
 import Transactions from "@/models/Transactions";
-import type { CSVMapping } from "@/models/csv";
+import type { CSVMapping, CsvData } from "@/models/types";
 import { createTransactionsData } from "../lib/csvUtils";
-
-export interface CsvData {
-  transactions: Transaction[];
-  summary: {
-    totalCount: number;
-    totalSpend: number;
-    totalReceived: number;
-    monthlyAggregates: Record<string, { spend: number; received: number }>;
-  };
-}
+import client from "@/lib/redisDb";
 
 /**
  * Process a CSV file given its file path and a mapping.
  * Returns a promise that resolves with the processed transactions
  * and an aggregation summary.
  */
-export function processCsvFile(
+export async function processCsvFile(
   filePath: string,
   mapping: CSVMapping
 ): Promise<CsvData> {
@@ -34,7 +26,7 @@ export function processCsvFile(
 
       Papa.parse<Record<string, any>>(data, {
         header: true,
-        complete: (results) => {
+        complete: async (results) => {
           const parsedRows = results.data;
 
           // Remap the CSV rows to our internal TransactionProps
@@ -52,7 +44,20 @@ export function processCsvFile(
             monthlyAggregates: transactionsCollection.getMonthlyBudgets(),
           };
 
-          resolve({ transactions, summary });
+          // create transactionData id
+          const randomId = crypto.randomUUID();
+          const transactionsDataId = `transactionsData-${randomId}`;
+
+          console.log(transactionsDataId);
+          // save new hash for the transactionData
+          await client.hSet(transactionsDataId, {
+            transactions: JSON.stringify(transactions),
+            summary: JSON.stringify(summary),
+          });
+
+          await client.expire(transactionsDataId, 7200);
+
+          resolve({ transactions, summary, transactionsDataId });
         },
         error: (error: Error) => {
           reject(error);

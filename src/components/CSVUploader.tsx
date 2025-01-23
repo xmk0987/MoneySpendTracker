@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, ChangeEvent } from "react";
 import Papa from "papaparse";
-import { CSVMapping } from "@/models/csv";
+import { CSVMapping } from "@/models/types";
 import { CSV_FIELD_LABELS, REQUIRED_CSV_FIELDS } from "../lib/constants";
 
 const CsvUploadMapper: React.FC = () => {
@@ -75,8 +75,11 @@ const CsvUploadMapper: React.FC = () => {
     formData.append("file", csvFile);
     formData.append("mapping", JSON.stringify(mapping));
 
+    // TODO Save the mapping and file name into session storage and rePopulate the form if same file uploaded
+    // after page refresh
+
     try {
-      const response = await fetch("/api/process-csv", {
+      const response = await fetch("/api/csv", {
         method: "POST",
         body: formData,
       });
@@ -85,7 +88,7 @@ const CsvUploadMapper: React.FC = () => {
         // Parse the response as JSON
         const data = await response.json();
         alert("CSV file processed successfully!");
-        console.log("Response Data:", data);
+        localStorage.setItem("transactionsId", data.data.transactionsDataId);
       } else {
         alert("Error processing CSV file.");
       }
@@ -95,7 +98,6 @@ const CsvUploadMapper: React.FC = () => {
     }
   };
 
-  console.log(csvFile);
   return (
     <div className="flex flex-col gap-8">
       <h1 className="text-2xl font-bold">Upload and Map CSV File</h1>

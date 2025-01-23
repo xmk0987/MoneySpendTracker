@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { TransactionProps } from "@/models/Transaction";
-import { CSVMapping } from "@/models/csv";
+import { CSVMapping } from "@/models/types";
 import Transaction from "@/models/Transaction";
 
 // Create the transactions data based on mapping and validate it for null values

@@ -101,12 +101,17 @@ export default class Transaction {
     if (!total) {
       return null;
     }
+    // Remove unwanted characters and replace comma with dot.
     const sanitizedTotal = total.replace(/[^0-9.,-]/g, "").replace(",", ".");
-    const parsedTotal = parseFloat(sanitizedTotal);
-    if (isNaN(parsedTotal)) {
+    const parsed = Number.parseFloat(sanitizedTotal);
+
+    // Check if the parsed value is NaN.
+    if (isNaN(parsed)) {
       return null;
     }
-    return parsedTotal;
+
+    // Return the number rounded to two decimals.
+    return Number(parsed.toFixed(2));
   }
 
   // Example method: returns a formatted total with currency symbol
