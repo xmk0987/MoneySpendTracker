@@ -3,33 +3,42 @@
 import { useCallback, useEffect, useState } from "react";
 import CsvUploadMapper from "../components/CSVUploader/CSVUploader";
 import { TransactionsData } from "@/models/types";
+import Dashboard from "./dashboard/page";
 
 export default function Home() {
   const [transactionsDataId, setTransactionsDataId] = useState("");
   const [transactionsData, setTransactionsData] =
     useState<TransactionsData | null>(null);
 
-  const getTransactionsData = useCallback(async (id: string) => {
-    try {
-      const response = await fetch(`/api/csv?id=${encodeURIComponent(id)}`, {
-        method: "GET",
-      });
+  // Get transactions data for dashboard if its not fetched
+  // If the id is not valid will empty states and ask for new upload
+  const getTransactionsData = useCallback(
+    async (id: string) => {
+      if (transactionsData) return;
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch transactions data");
+      try {
+        const response = await fetch(`/api/csv?id=${encodeURIComponent(id)}`, {
+          method: "GET",
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch transactions data");
+        }
+
+        const data = await response.json();
+        console.log("Transactions Data:", data.data);
+        setTransactionsData(data.data);
+      } catch (error) {
+        console.error("Error fetching transactions data:", error);
+        setTransactionsDataId("");
+        setTransactionsData(null);
+        localStorage.removeItem("transactionsId");
       }
+    },
+    [transactionsData]
+  );
 
-      const data = await response.json();
-      console.log("Transactions Data:", data.data);
-      setTransactionsData(data.data);
-    } catch (error) {
-      console.error("Error fetching transactions data:", error);
-      setTransactionsDataId("");
-      setTransactionsData(null);
-      localStorage.removeItem("transactionsId");
-    }
-  }, []);
-
+  // Fetch the data when an id is present if no id reset states
   useEffect(() => {
     if (transactionsDataId !== "") {
       getTransactionsData(transactionsDataId);
@@ -39,6 +48,7 @@ export default function Home() {
     }
   }, [getTransactionsData, transactionsDataId]);
 
+  // Initialize the id from localstorage if present
   useEffect(() => {
     const savedId = localStorage.getItem("transactionsId");
     if (savedId) {
@@ -47,12 +57,21 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="flex items-center justify-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      {transactionsDataId === "" && !transactionsData ? (
-        <CsvUploadMapper />
+    <main className="mainContainer">
+      {transactionsData ? (
+        <Dashboard data={transactionsData} />
+      ) : transactionsDataId === "" ? (
+        <div className="centerContainer">
+          <CsvUploadMapper
+            setId={setTransactionsDataId}
+            setData={setTransactionsData}
+          />
+        </div>
       ) : (
-        <p>{transactionsDataId}</p>
+        <div className="centerContainer">
+          <p>Loading...</p>
+        </div>
       )}
-    </div>
+    </main>
   );
 }

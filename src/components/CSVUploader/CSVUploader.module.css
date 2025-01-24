@@ -1,4 +1,4 @@
-.container {
+.content {
   background-color: var(--component-background);
   padding: calc(var(--gutter));
   border-radius: var(--radius);
@@ -6,16 +6,17 @@
   flex-direction: column;
   gap: 10px;
   box-shadow: 0.8px 1.8px 12px -4px white;
+  overflow: auto;
+  min-width: 500px;
 }
 
 .fileInput {
   display: none;
 }
 
-.container form {
+.content form {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin-top: 10px;
   align-items: flex-end;
 }
