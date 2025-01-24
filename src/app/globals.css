@@ -3,19 +3,97 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --main-background: #1a1358;
+  --secondary-background: #4f3e8ba1;
+  --background: radial-gradient(#3829be 0%, var(--main-background) 100%);
+
+  --component-background: #1a1358c7;
+  --accent: #f7ebff;
+  --text: #f7ebff;
+  --text-2: black;
+
+  --gutter: 20px;
+  --radius: 10px;
+  --button-padding: 5px 10px;
+
+  --font-manrope: "Manrope", sans-serif;
+  --font-inter: "Inter", sans-serif;
+
+  --font-size-normal: 15px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: 0;
 }
 
 body {
-  color: var(--foreground);
+  color: var(--text);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+  font-size: var(--font-size-normal);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-inter);
+  font-weight: 600;
+}
+
+/* Reset for Buttons, Inputs, and Form Controls */
+button,
+input,
+textarea,
+select {
+  all: unset; /* Reset all inherited and default styles */
+  box-sizing: border-box; /* Include padding and border in element's width and height */
+  font-family: inherit; /* Inherit font family from parent */
+}
+
+input,
+select {
+  width: 100%;
+  background-color: var(--accent);
+  padding: var(--button-padding);
+  color: black;
+  border-radius: var(--radius);
+  border: 1px solid black;
+  font-size: 0.8rem;
+}
+
+button {
+  box-shadow: 0.8px 1.8px 12px -4px white;
+  width: fit-content;
+  padding: var(--button-padding);
+  text-align: center;
+  background-color: var(--accent);
+  color: black;
+  font-weight: bold;
+  border-radius: var(--radius);
+  font-size: 0.85rem;
+}
+
+button:not(:disabled):hover {
+  cursor: pointer;
+  background-color: #0068b1;
+  box-shadow: 0.8px 1.8px 12px -4px #0f75be;
+  color: var(--accent);
+}
+
+select:hover {
+  cursor: pointer;
+}
+
+button:active {
+  box-shadow: none;
+}
+
+button:disabled {
+  background-color: gray;
+  box-shadow: none;
 }

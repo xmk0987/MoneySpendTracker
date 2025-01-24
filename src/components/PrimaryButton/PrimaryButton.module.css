@@ -1,0 +1,6 @@
+.button {
+  background-color: var(--accent);
+  color: black;
+  font-weight: bold;
+  border-radius: var(--radius);
+}

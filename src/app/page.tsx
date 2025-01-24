@@ -1,14 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import CsvUploadMapper from "../components/CSVUploader";
+import CsvUploadMapper from "../components/CSVUploader/CSVUploader";
 import { TransactionsData } from "@/models/types";
 
 export default function Home() {
-  const [transactionsDataId, setTransactionsDataId] = useState(() => {
-    const savedId = localStorage.getItem("transactionsId");
-    return savedId ? savedId : "";
-  });
+  const [transactionsDataId, setTransactionsDataId] = useState("");
   const [transactionsData, setTransactionsData] =
     useState<TransactionsData | null>(null);
 
@@ -27,6 +24,9 @@ export default function Home() {
       setTransactionsData(data.data);
     } catch (error) {
       console.error("Error fetching transactions data:", error);
+      setTransactionsDataId("");
+      setTransactionsData(null);
+      localStorage.removeItem("transactionsId");
     }
   }, []);
 
@@ -39,7 +39,13 @@ export default function Home() {
     }
   }, [getTransactionsData, transactionsDataId]);
 
-  console.log(transactionsData, transactionsDataId);
+  useEffect(() => {
+    const savedId = localStorage.getItem("transactionsId");
+    if (savedId) {
+      setTransactionsDataId(savedId);
+    }
+  }, []);
+
   return (
     <div className="flex items-center justify-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       {transactionsDataId === "" && !transactionsData ? (

@@ -1,8 +1,10 @@
 "use client";
-import React, { useState, ChangeEvent } from "react";
+import React, { useState, ChangeEvent, useRef, useEffect } from "react";
 import Papa from "papaparse";
 import { CSVMapping } from "@/models/types";
-import { CSV_FIELD_LABELS, REQUIRED_CSV_FIELDS } from "../lib/constants";
+import { CSV_FIELD_LABELS, REQUIRED_CSV_FIELDS } from "../../lib/constants";
+import styles from "./CSVUploader.module.css";
+import PrimaryButton from "../PrimaryButton/PrimaryButton";
 
 const CsvUploadMapper: React.FC = () => {
   // State to store the uploaded CSV file.
@@ -12,6 +14,10 @@ const CsvUploadMapper: React.FC = () => {
   // State to hold the mapping from each required field to a CSV header.
   const [mapping, setMapping] = useState<Partial<CSVMapping>>({});
 
+  const [invalidFields, setInvalidFields] = useState<string[]>([]);
+
+  const fileInputRef = useRef<HTMLInputElement>(null); // Reference for the file input
+
   /**
    * Reads the selected CSV file, and uses Papa Parse to extract the header row.
    */
@@ -19,6 +25,9 @@ const CsvUploadMapper: React.FC = () => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       setCsvFile(file);
+
+      // Reset previous mappings and invalid fields
+      setInvalidFields([]);
 
       // Parse the CSV file to extract only the header row.
       Papa.parse(file, {
@@ -44,6 +53,13 @@ const CsvUploadMapper: React.FC = () => {
     }
   };
 
+  const handleUploadFileClick = () => {
+    // Trigger the file input click
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
   /**
    * Updates the mapping state when a user selects a CSV header for a required field.
    * @param requiredField - The required field from our data model.
@@ -58,6 +74,16 @@ const CsvUploadMapper: React.FC = () => {
       [requiredField]: value,
     }));
   };
+
+  /**
+   * Validates the mapping and updates the invalidFields state.
+   */
+  useEffect(() => {
+    const invalid = REQUIRED_CSV_FIELDS.filter(
+      (field) => !mapping[field as keyof CSVMapping]
+    );
+    setInvalidFields(invalid);
+  }, [mapping]);
 
   /**
    * Submits the CSV file along with the mapping configuration to the backend for processing.
@@ -98,40 +124,76 @@ const CsvUploadMapper: React.FC = () => {
     }
   };
 
+  // Determine if the form is valid (all required fields are mapped)
+  const isFormValid = REQUIRED_CSV_FIELDS.every(
+    (field) => mapping[field as keyof CSVMapping]
+  );
+
   return (
-    <div className="flex flex-col gap-8">
-      <h1 className="text-2xl font-bold">Upload and Map CSV File</h1>
+    <div className={styles["container"]}>
+      <h1 className="text-xl">Upload and Map CSV File</h1>
+
       {/* CSV file upload input */}
-      <input type="file" accept=".csv" onChange={handleFileChange} />
+      {/* Hidden file input */}
+      <input
+        type="file"
+        id="selectedFile"
+        accept=".csv"
+        ref={fileInputRef}
+        onChange={handleFileChange}
+        className={styles.fileInput} // Apply styles to hide the file input
+      />
+      {!csvFile ? <p>No file selected</p> : <p>{csvFile.name}</p>}
+
+      {/* Custom button to trigger file input */}
+      <PrimaryButton
+        text={csvFile ? "Change" : "Upload"}
+        onClick={handleUploadFileClick}
+      />
 
       {/* Once a file is uploaded and headers are parsed, display the mapping form */}
       {csvFile && csvHeaders.length > 0 && (
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <h2 className="text-xl">Map CSV Columns to Data Fields</h2>
+        <form onSubmit={handleSubmit}>
+          <h2 className="text-base">Map CSV Columns to Data Fields</h2>
           {/* Render a dropdown for each required field */}
-          {REQUIRED_CSV_FIELDS.map((field) => (
-            <div key={field} className="flex flex-col">
-              <label htmlFor={field} className="font-medium">
-                {CSV_FIELD_LABELS[field]}
-              </label>
-              <select
-                id={field}
-                value={mapping[field] || ""}
-                onChange={(e) => handleMappingChange(field, e.target.value)}
-                className="p-2 border rounded text-slate-950"
-              >
-                <option value="">Select a column</option>
-                {csvHeaders.map((header) => (
-                  <option key={header} value={header}>
-                    {header}
-                  </option>
-                ))}
-              </select>
-            </div>
-          ))}
+          {REQUIRED_CSV_FIELDS.map((field) => {
+            const isInvalid = invalidFields.includes(field);
+            return (
+              <div key={field} className="w-full">
+                <label htmlFor={field} className="text-xs pl-1">
+                  {CSV_FIELD_LABELS[field]}
+                </label>
+                <select
+                  id={field}
+                  value={mapping[field] || ""}
+                  onChange={(e) => handleMappingChange(field, e.target.value)}
+                  className={`text-xs p-2 ${
+                    isInvalid ? "border-red-500" : "border-gray-300"
+                  } w-full`}
+                >
+                  <option value="">Select a column</option>
+                  {csvHeaders.map((header) => (
+                    <option key={header} value={header}>
+                      {header}
+                    </option>
+                  ))}
+                </select>
+                {isInvalid && (
+                  <p className="text-red-500 text-xs mt-1">
+                    This field is required.
+                  </p>
+                )}
+              </div>
+            );
+          })}
           <button
             type="submit"
-            className="p-4 bg-blue-600 text-white rounded hover:bg-blue-700"
+            disabled={!isFormValid}
+            className={`mt-2 ${
+              isFormValid
+                ? "bg-blue-500 text-white cursor-pointer"
+                : "bg-gray-300 text-gray-700 cursor-not-allowed"
+            }`}
           >
             Submit CSV
           </button>
