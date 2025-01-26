@@ -42,7 +42,7 @@ export default class Transaction {
 
     const parsedTotal = Transaction.parseTotal(total);
 
-    if (!parsedTotal) {
+    if (parsedTotal === null) {
       throw new Error(`Invalid total: ${total}`);
     }
 
@@ -93,24 +93,31 @@ export default class Transaction {
   }
 
   /**
-   * Replaces comma with dot and parses to float
-   * @param total - The total string to parse.
-   * @returns A valid total float
+   * Attempts to parse a total string with potential non-ASCII minus signs.
+   * Returns null if parsing fails.
    */
   static parseTotal(total: string): number | null {
+    // Immediately handle empty strings or nullish values
     if (!total) {
       return null;
     }
-    // Remove unwanted characters and replace comma with dot.
-    const sanitizedTotal = total.replace(/[^0-9.,-]/g, "").replace(",", ".");
-    const parsed = Number.parseFloat(sanitizedTotal);
 
-    // Check if the parsed value is NaN.
-    if (isNaN(parsed)) {
+    // 1) Replace common dash variations with ASCII minus (U+002D).
+    //    This handles en-dash, em-dash, and the unicode minus sign.
+    const withAsciiMinus = total.replace(/[–—−]/g, "-");
+
+    // 2) Convert decimal commas to dots (e.g. "−11,50" => "-11.50")
+    const sanitized = withAsciiMinus.replace(",", ".").trim();
+
+    // 3) Parse using parseFloat
+    const parsed = Number.parseFloat(sanitized);
+
+    // 4) If it's NaN, we return null => indicates an invalid parse
+    if (Number.isNaN(parsed)) {
       return null;
     }
 
-    // Return the number rounded to two decimals.
+    // 5) Round to two decimals
     return Number(parsed.toFixed(2));
   }
 

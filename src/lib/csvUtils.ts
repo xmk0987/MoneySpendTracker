@@ -31,15 +31,12 @@ export const validateTransactionData = (
     // Check that date_created produces a valid date.
     const validDatePayed = Transaction.parseDateFlexible(props.date_payed);
     const validDateCreated = Transaction.parseDateFlexible(props.date_created);
-    // Check that total can be converted to a number
-    const validTotal = Transaction.parseTotal(props.total);
     const validSender = props.sender && props.sender.trim() !== "";
     const validReceiver = props.receiver && props.receiver.trim() !== "";
 
     return (
       validDatePayed !== null &&
       validDateCreated !== null &&
-      validTotal !== null &&
       validSender &&
       validReceiver
     );
