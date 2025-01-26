@@ -6,7 +6,7 @@ See different kinds of graphs and finally get your spending in control.
 
 ## Live
 
-The web application currently under construction. Will be hosted live for anybody to use without need to register or login.
+The web application can be tried through the browser from: https://cash-trail.vercel.app/
 
 ## Trying out Locally
 
