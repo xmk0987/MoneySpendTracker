@@ -1,3 +1,15 @@
+.outerContainer {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  overflow: scroll;
+  padding: 5px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  position: relative;
+}
+
 .content {
   background-color: var(--component-background);
   padding: calc(var(--gutter));

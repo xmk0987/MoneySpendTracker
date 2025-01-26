@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import CsvUploadMapper from "../components/CSVUploader/CSVUploader";
 import { TransactionsData } from "@/models/types";
 import Dashboard from "./dashboard/page";
+import Loader from "@/components/Loader/Loader";
 
 export default function Home() {
   const [transactionsDataId, setTransactionsDataId] = useState("");
@@ -78,16 +79,12 @@ export default function Home() {
       {transactionsData ? (
         <Dashboard data={transactionsData} changeCsv={changeFile} />
       ) : transactionsDataId === "" ? (
-        <div className="centerContainer">
-          <CsvUploadMapper
-            setId={setTransactionsDataId}
-            setData={setTransactionsData}
-          />
-        </div>
+        <CsvUploadMapper
+          setId={setTransactionsDataId}
+          setData={setTransactionsData}
+        />
       ) : (
-        <div className="centerContainer">
-          <p>Loading...</p>
-        </div>
+        <Loader />
       )}
     </main>
   );
