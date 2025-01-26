@@ -1,14 +1,21 @@
 export function capitalizeFirstLetter(str: string): string {
   if (str.length === 0) return str;
-  return str.charAt(0).toUpperCase() + str.slice(1);
+
+  const firstNonWhitespaceIndex = str.search(/\S/);
+  if (firstNonWhitespaceIndex === -1) return str;
+
+  return (
+    str.slice(0, firstNonWhitespaceIndex) +
+    str.charAt(firstNonWhitespaceIndex).toUpperCase() +
+    str.slice(firstNonWhitespaceIndex + 1)
+  );
 }
 
 // Utility function to normalize receiver names
 export const normalizeReceiver = (receiver: string): string => {
   return receiver
-    .toLowerCase() // Convert to lowercase
-    .replace(/[0-9]/g, "") // Remove numbers
-    .replace(/[^a-z\s]/g, "") // Remove special characters
-    .trim()
-    .split(" ")[0];
+    .toLowerCase()
+    .replace(/[^a-z\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 };

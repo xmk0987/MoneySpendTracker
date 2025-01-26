@@ -94,7 +94,7 @@ export default class Transactions {
     const groupedMap: Map<string, number> = new Map();
 
     this.transactions.forEach((transaction) => {
-      const receiver = normalizeReceiver(transaction.receiver);
+      const receiver = normalizeReceiver(transaction.receiver).split(" ")[0];
 
       const currentTotal = groupedMap.get(receiver) ?? 0;
 
