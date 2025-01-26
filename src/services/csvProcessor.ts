@@ -37,6 +37,14 @@ export async function processCsvFile(
             .map((props) => Transaction.tryCreate(props))
             .filter((tx): tx is Transaction => tx !== null);
 
+          // Categorize each transaction
+          /*           for (const tx of transactions) {
+            await tx.categorizeTransaction();
+            console.log(
+              `Transaction from ${tx.sender} of $${tx.total} categorized as ${tx.category}`
+            );
+          } */
+
           const transactionsCollection = new Transactions(transactions);
           const summary = {
             totalCount: transactionsCollection.countTotal(),
@@ -46,8 +54,9 @@ export async function processCsvFile(
               yearlyAggregates: transactionsCollection.getYearlyBudgets(),
               monthlyAggregates: transactionsCollection.getMonthlyBudgets(),
               dailyAggregates: transactionsCollection.getDailyBudgets(),
-              yearlyType: transactionsCollection.getYearlyBudgetsByType(),
-              monthlyType: transactionsCollection.getMonthlyBudgetsByType(),
+            },
+            categories: {
+              receiver: transactionsCollection.getReceiverCategory(),
             },
             timeline: transactionsCollection.getTimeline(),
           };

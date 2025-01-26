@@ -1,12 +1,13 @@
 .graphBox {
   width: 100%;
+  height: 100%;
   background-color: var(--component-background);
   padding: var(--gutter);
   box-shadow: var(--shadow);
   border-radius: var(--radius);
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 20px;
 }
 
 .barHeader {
@@ -28,4 +29,10 @@
 .activeButton {
   text-decoration: underline;
   color: var(--accent2);
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  align-items: center;
 }

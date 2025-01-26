@@ -1,5 +1,7 @@
 // src/models/Transactions.ts
+import { normalizeReceiver } from "@/utils/helperFunctions";
 import Transaction from "./Transaction";
+import { getISOWeek } from "@/utils/dates";
 
 export default class Transactions {
   private transactions: Transaction[];
@@ -50,7 +52,7 @@ export default class Transactions {
   getWeeklyBudgets(): Record<string, { spend: number; received: number }> {
     return this.aggregateBudgets((tx) => {
       const year = tx.datePayed.getFullYear();
-      const week = this.getISOWeek(tx.datePayed);
+      const week = getISOWeek(tx.datePayed);
       return `${year}-W${week.toString().padStart(2, "0")}`;
     });
   }
@@ -68,64 +70,6 @@ export default class Transactions {
     );
   }
 
-  // Yearly Budgets Grouped by Type
-  getYearlyBudgetsByType(): Record<
-    string,
-    Record<string, { spend: number; received: number }>
-  > {
-    return this.transactions.reduce((acc, tx) => {
-      const year = tx.datePayed.getFullYear();
-      const type = tx.typeOfTransaction;
-      const key = `${year}`;
-
-      if (!acc[key]) {
-        acc[key] = {};
-      }
-
-      if (!acc[key][type]) {
-        acc[key][type] = { spend: 0, received: 0 };
-      }
-
-      if (tx.total < 0) {
-        acc[key][type].spend += Math.abs(tx.total);
-      } else {
-        acc[key][type].received += tx.total;
-      }
-
-      return acc;
-    }, {} as Record<string, Record<string, { spend: number; received: number }>>);
-  }
-
-  // Monthly Budgets Grouped by Type
-  getMonthlyBudgetsByType(): Record<
-    string,
-    Record<string, { spend: number; received: number }>
-  > {
-    return this.transactions.reduce((acc, tx) => {
-      const date = tx.datePayed;
-      const month = `${date.getFullYear()}-${(date.getMonth() + 1)
-        .toString()
-        .padStart(2, "0")}`;
-      const type = tx.typeOfTransaction;
-
-      if (!acc[month]) {
-        acc[month] = {};
-      }
-
-      if (!acc[month][type]) {
-        acc[month][type] = { spend: 0, received: 0 };
-      }
-
-      if (tx.total < 0) {
-        acc[month][type].spend += Math.abs(tx.total);
-      } else {
-        acc[month][type].received += tx.total;
-      }
-
-      return acc;
-    }, {} as Record<string, Record<string, { spend: number; received: number }>>);
-  }
-
   getTimeline(): { startDate: string | null; endDate: string | null } {
     if (this.transactions.length === 0) {
       return { startDate: null, endDate: null };
@@ -141,22 +85,30 @@ export default class Transactions {
     };
   }
 
-  // Helper function to get ISO week number
-  private getISOWeek(date: Date): number {
-    const tmpDate = new Date(date.valueOf());
-    const dayNumber = (date.getDay() + 6) % 7; // Monday=0, Sunday=6
-    tmpDate.setDate(tmpDate.getDate() - dayNumber + 3);
-    const firstThursday = tmpDate.valueOf();
-    tmpDate.setMonth(0, 1);
-    if (tmpDate.getDay() !== 4) {
-      tmpDate.setMonth(0, 1 + ((4 - tmpDate.getDay() + 7) % 7));
-    }
-    const weekNumber =
-      1 +
-      Math.round(
-        (firstThursday - tmpDate.valueOf()) / (7 * 24 * 60 * 60 * 1000)
-      );
-    return weekNumber;
+  /**
+   * Groups transactions by receiver and sums the total amount per receiver.
+   * Sorts the receivers in descending order based on the total amount.
+   * @returns A Record where the key is the receiver's name (capitalized) and the value is the total amount.
+   */
+  getReceiverCategory(): Record<string, number> {
+    const groupedMap: Map<string, number> = new Map();
+
+    this.transactions.forEach((transaction) => {
+      const receiver = normalizeReceiver(transaction.receiver);
+
+      const currentTotal = groupedMap.get(receiver) ?? 0;
+
+      groupedMap.set(receiver, currentTotal + Math.abs(transaction.total));
+    });
+
+    const groupedData = Object.fromEntries(
+      Array.from(groupedMap.entries()).map(([key, value]) => [
+        key,
+        parseFloat(value.toFixed(2)),
+      ])
+    );
+
+    return groupedData;
   }
 
   private aggregateBudgets(

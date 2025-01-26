@@ -1,3 +1,4 @@
+import { capitalizeFirstLetter } from "@/utils/helperFunctions";
 import { ChartOptions, ChartData } from "chart.js";
 
 // Define the structure for the datasets
@@ -68,7 +69,3 @@ export const getChartOptions = (currentType: string): ChartOptions<"bar"> => ({
     },
   },
 });
-
-const capitalizeFirstLetter = (str: string): string => {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-};

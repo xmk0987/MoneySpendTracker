@@ -14,9 +14,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Where did my money go",
+  title: "CashTrail",
   description:
-    "A web application taht allows you to upload your bank statement csv so you can view your spending on a dashboard how you wish",
+    "A web application that allows you to upload your bank statement csv so you can view your spending on a dashboard how you wish",
 };
 
 export default function RootLayout({

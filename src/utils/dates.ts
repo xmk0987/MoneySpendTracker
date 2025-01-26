@@ -43,3 +43,19 @@ export function formatDateRange(startDate: string, endDate: string): string {
     return `${startDay}.${startMonth}.${startYear} - ${endDay}.${endMonth}.${endYear}`;
   }
 }
+
+// Helper function to get ISO week number
+export function getISOWeek(date: Date): number {
+  const tmpDate = new Date(date.valueOf());
+  const dayNumber = (date.getDay() + 6) % 7; // Monday=0, Sunday=6
+  tmpDate.setDate(tmpDate.getDate() - dayNumber + 3);
+  const firstThursday = tmpDate.valueOf();
+  tmpDate.setMonth(0, 1);
+  if (tmpDate.getDay() !== 4) {
+    tmpDate.setMonth(0, 1 + ((4 - tmpDate.getDay() + 7) % 7));
+  }
+  const weekNumber =
+    1 +
+    Math.round((firstThursday - tmpDate.valueOf()) / (7 * 24 * 60 * 60 * 1000));
+  return weekNumber;
+}

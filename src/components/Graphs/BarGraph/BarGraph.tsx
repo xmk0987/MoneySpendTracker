@@ -15,7 +15,6 @@ import {
 } from "chart.js";
 import { getChartData, getChartOptions } from "./barGraphConfig";
 
-// Register Chart.js components
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -121,7 +120,7 @@ const BarGraph: React.FC<BarGraphProps> = ({ data }) => {
           ))}
         </div>
       </div>
-      <div className={styles.chartContainer}>
+      <div className={styles.content}>
         <Bar data={chartData} options={chartOptions} />
       </div>
     </div>

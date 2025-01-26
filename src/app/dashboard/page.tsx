@@ -5,6 +5,7 @@ import styles from "./Dashboard.module.css";
 import InfoBox from "@/components/InfoBox/InfoBox";
 import { formatDateRange } from "@/utils/dates";
 import BarGraph from "@/components/Graphs/BarGraph/BarGraph";
+import PieChart from "@/components/Graphs/PieChart/PieChart";
 
 interface DashboardProps {
   data: TransactionsData;
@@ -24,7 +25,7 @@ const Dashboard: React.FC<DashboardProps> = ({ data, changeCsv }) => {
   return (
     <div className={styles["dashboardContainer"]}>
       <div className={styles["header"]}>
-        <h2 className="truncate">Where is my money</h2>
+        <h2 className="truncate">Dashboard</h2>
         <div className={styles["headerOptions"]}>
           <div className={`text-sm ${styles["currentFile"]}`}>
             <p>{data.fileName}</p>
@@ -45,7 +46,9 @@ const Dashboard: React.FC<DashboardProps> = ({ data, changeCsv }) => {
         <div className={styles["spendEarnGraph"]}>
           <BarGraph data={data} />
         </div>
-        <div className={styles["categoryGraph"]}></div>
+        <div className={styles["categoryGraph"]}>
+          <PieChart data={data} />
+        </div>
       </div>
     </div>
   );

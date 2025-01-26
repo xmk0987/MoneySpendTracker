@@ -17,6 +17,7 @@ export default class Transaction {
   typeOfTransaction: string;
   sender: string;
   receiver: string;
+  category?: string;
 
   constructor({
     date_created,
@@ -118,4 +119,5 @@ export default class Transaction {
   getFormattedTotal(currency: string = "$"): string {
     return `${currency}${this.total.toFixed(2)}`;
   }
+
 }

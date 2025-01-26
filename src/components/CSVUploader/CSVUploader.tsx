@@ -148,7 +148,7 @@ const CsvUploadMapper: React.FC<CsvUploadMapperProps> = ({
 
   return (
     <div className={styles["content"]}>
-      <h1 className="text-xl">Upload and Map CSV File</h1>
+      <h1 className="text-xl">CashTrail</h1>
 
       {/* CSV file upload input */}
       {/* Hidden file input */}

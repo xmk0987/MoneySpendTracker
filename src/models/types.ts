@@ -25,14 +25,9 @@ export interface TransactionsData {
       yearlyAggregates: Record<string, { spend: number; received: number }>;
       monthlyAggregates: Record<string, { spend: number; received: number }>;
       dailyAggregates: Record<string, { spend: number; received: number }>;
-      yearlyType: Record<
-        string,
-        Record<string, { spend: number; received: number }>
-      >;
-      monthlyType: Record<
-        string,
-        Record<string, { spend: number; received: number }>
-      >;
+    };
+    categories: {
+      receiver: Record<string, number>;
     };
   };
 }

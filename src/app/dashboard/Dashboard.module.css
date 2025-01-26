@@ -40,7 +40,7 @@
 }
 
 .graphs {
-  flex: 1;
+  width: 100%;
   display: inline-flex;
   gap: var(--gutter);
   padding: 5px;
