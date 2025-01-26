@@ -10,6 +10,8 @@ const createJestConfig = nextJest({
 const config: Config = {
   coverageProvider: "v8",
   testEnvironment: "jsdom",
+  verbose: true, // Enables detailed test output
+  silent: false, // Ensures console logs are not suppressed
   // Add more setup options before each test is run
   // setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
 };

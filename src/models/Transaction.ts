@@ -56,8 +56,6 @@ export default class Transaction {
   // Factory method that attempts to create a Transaction.
   static tryCreate(props: TransactionProps): Transaction | null {
     try {
-      // Minimal validation is performed in the route and utilities;
-      // here we catch any conversion exceptions.
       return new Transaction(props);
     } catch (e) {
       console.error("Transaction creation failed:", e);
@@ -72,6 +70,7 @@ export default class Transaction {
    */
   static parseDateFlexible(dateStr: string): Date | null {
     const formats = [
+      "dd-mm-yyyy",
       "dd.MM.yyyy", // e.g. "22.01.2025"
       "yyyy-MM-dd", // e.g. "2025-01-22"
       "MM/dd/yyyy", // e.g. "01/22/2025"
@@ -119,5 +118,4 @@ export default class Transaction {
   getFormattedTotal(currency: string = "$"): string {
     return `${currency}${this.total.toFixed(2)}`;
   }
-
 }

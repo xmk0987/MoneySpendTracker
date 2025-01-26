@@ -17,6 +17,7 @@ const Dashboard: React.FC<DashboardProps> = ({ data, changeCsv }) => {
     data.summary.totalReceived - data.summary.totalSpend
   ).toFixed(2);
 
+  console.log(data);
   const date = formatDateRange(
     data.summary.timeline.startDate!,
     data.summary.timeline.endDate!

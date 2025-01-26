@@ -13,7 +13,6 @@ export const createTransactionsData = (
 
     for (const internalKey in mapping) {
       const csvHeader = mapping[internalKey as keyof CSVMapping];
-      // Only map if the CSV row has that header
       if (csvHeader && row.hasOwnProperty(csvHeader)) {
         mappedRow[internalKey] = row[csvHeader];
       }
@@ -25,7 +24,9 @@ export const createTransactionsData = (
 };
 
 // Validate transactions data for null values
-const validateTransactionData = (transactionsData: TransactionProps[]) => {
+export const validateTransactionData = (
+  transactionsData: TransactionProps[]
+) => {
   return transactionsData.filter((props) => {
     // Check that date_created produces a valid date.
     const validDatePayed = Transaction.parseDateFlexible(props.date_payed);
