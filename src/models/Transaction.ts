@@ -102,27 +102,16 @@ export default class Transaction {
       return null;
     }
 
-    // 1) Replace common dash variations with ASCII minus (U+002D).
-    //    This handles en-dash, em-dash, and the unicode minus sign.
     const withAsciiMinus = total.replace(/[–—−]/g, "-");
 
-    // 2) Convert decimal commas to dots (e.g. "−11,50" => "-11.50")
     const sanitized = withAsciiMinus.replace(",", ".").trim();
 
-    // 3) Parse using parseFloat
     const parsed = Number.parseFloat(sanitized);
 
-    // 4) If it's NaN, we return null => indicates an invalid parse
     if (Number.isNaN(parsed)) {
       return null;
     }
 
-    // 5) Round to two decimals
     return Number(parsed.toFixed(2));
-  }
-
-  // Example method: returns a formatted total with currency symbol
-  getFormattedTotal(currency: string = "$"): string {
-    return `${currency}${this.total.toFixed(2)}`;
   }
 }
