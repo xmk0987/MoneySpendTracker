@@ -1,9 +1,55 @@
 .dashboardContainer {
-  flex: 1;
   width: 100%;
-  height: 100%;
-  overflow: hidden;
   background-color: var(--secondary-background);
   padding: var(--gutter);
   border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gutter);
+  max-width: 1400px;
+  overflow: scroll;
+}
+
+.header {
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px;
+}
+
+.headerOptions {
+  display: inline-flex;
+  gap: var(--gutter);
+  align-items: center;
+}
+
+.currentFile {
+  display: inline-flex;
+  gap: calc(var(--gutter) / 2);
+}
+
+.header h2 {
+  flex-grow: 1;
+}
+
+.info {
+  width: 100%;
+  display: inline-flex;
+  padding: 5px;
+  gap: var(--gutter);
+}
+
+.graphs {
+  flex: 1;
+  display: inline-flex;
+  gap: var(--gutter);
+  padding: 5px;
+}
+
+.spendEarnGraph {
+  flex: 3;
+}
+
+.categoryGraph {
+  flex: 2;
 }

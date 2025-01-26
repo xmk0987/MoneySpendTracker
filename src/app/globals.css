@@ -7,8 +7,9 @@
   --secondary-background: #4f3e8ba1;
   --background: radial-gradient(#3829be 0%, var(--main-background) 100%);
 
-  --component-background: #1a1358c7;
+  --component-background: #1a1358e6;
   --accent: #f7ebff;
+  --accent2: #ffb351;
   --text: #f7ebff;
   --text-2: black;
 
@@ -20,6 +21,8 @@
   --font-inter: "Inter", sans-serif;
 
   --font-size-normal: 15px;
+
+  --shadow: 0px 1.8px 12px -4px white;
 }
 
 *,
@@ -29,6 +32,16 @@
   margin: 0;
   padding: 0;
   border: 0;
+}
+
+*::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+* {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 body {
@@ -66,8 +79,8 @@ select {
   font-size: 0.8rem;
 }
 
-button {
-  box-shadow: 0.8px 1.8px 12px -4px white;
+.button {
+  box-shadow: var(--shadow);
   width: fit-content;
   padding: var(--button-padding);
   text-align: center;
@@ -80,9 +93,11 @@ button {
 
 button:not(:disabled):hover {
   cursor: pointer;
-  background-color: #0068b1;
-  box-shadow: 0.8px 1.8px 12px -4px #0f75be;
-  color: var(--accent);
+}
+
+.button:not(:disabled):hover {
+  background-color: var(--accent2);
+  box-shadow: 0px 1.8px 12px -4px #4cb3fc;
 }
 
 select:hover {
@@ -99,20 +114,21 @@ button:disabled {
 }
 
 .mainContainer {
-  min-height: 100vh;
-  overflow: hidden;
+  height: 100vh;
   display: flex;
   padding: var(--gutter);
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .centerContainer {
   flex: 1;
   width: 100%;
   height: 100%;
-  overflow: hidden;
+  overflow: scroll;
+  padding: 5px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  padding: var(--gutter);
 }

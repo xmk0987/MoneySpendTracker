@@ -24,8 +24,14 @@ export async function handleGetCsv(
     // Parse the stored JSON strings back to objects
     const transactions = JSON.parse(data.transactions);
     const summary = JSON.parse(data.summary);
+    const fileName = data.fileName;
 
-    const parsedData = { transactions, summary };
+    const parsedData = {
+      transactions,
+      summary,
+      fileName,
+      transactionsDataId: id,
+    };
 
     res
       .status(200)

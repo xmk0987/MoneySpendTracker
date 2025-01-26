@@ -1,0 +1,10 @@
+.infoBox {
+  flex: 1;
+  background-color: var(--component-background);
+  padding: var(--gutter);
+  box-shadow: var(--shadow);
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

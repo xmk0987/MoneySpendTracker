@@ -56,10 +56,28 @@ export default function Home() {
     }
   }, []);
 
+  const changeFile = async (id: string) => {
+    try {
+      const response = await fetch(`/api/csv?id=${encodeURIComponent(id)}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete csv data");
+      }
+
+      setTransactionsData(null);
+      setTransactionsDataId("");
+      localStorage.removeItem("transactionsId");
+    } catch (error) {
+      console.error("Error removing csv", error);
+    }
+  };
+
   return (
     <main className="mainContainer">
       {transactionsData ? (
-        <Dashboard data={transactionsData} />
+        <Dashboard data={transactionsData} changeCsv={changeFile} />
       ) : transactionsDataId === "" ? (
         <div className="centerContainer">
           <CsvUploadMapper

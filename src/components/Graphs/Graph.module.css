@@ -1,0 +1,31 @@
+.graphBox {
+  width: 100%;
+  background-color: var(--component-background);
+  padding: var(--gutter);
+  box-shadow: var(--shadow);
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.barHeader {
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.buttonGroup {
+  display: inline-flex;
+  gap: 10px;
+  font-size: 0.8rem;
+}
+
+.buttonGroup button:hover {
+  color: var(--accent2);
+}
+
+.activeButton {
+  text-decoration: underline;
+  color: var(--accent2);
+}

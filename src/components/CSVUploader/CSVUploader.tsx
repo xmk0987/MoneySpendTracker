@@ -2,7 +2,11 @@
 import React, { useState, ChangeEvent, useRef, useEffect } from "react";
 import Papa from "papaparse";
 import { CSVMapping, TransactionsData } from "@/models/types";
-import { CSV_FIELD_LABELS, REQUIRED_CSV_FIELDS } from "../../lib/constants";
+import {
+  CSV_FIELD_LABELS,
+  REQUIRED_CSV_FIELDS,
+  HEADER_MAPPING,
+} from "../../lib/constants";
 import styles from "./CSVUploader.module.css";
 import PrimaryButton from "../PrimaryButton/PrimaryButton";
 
@@ -48,8 +52,13 @@ const CsvUploadMapper: React.FC<CsvUploadMapperProps> = ({
           // Auto-map if CSV headers match the required fields.
           const initialMapping: Partial<CSVMapping> = {};
           REQUIRED_CSV_FIELDS.forEach((field) => {
-            if (headers.includes(field)) {
-              initialMapping[field as keyof CSVMapping] = field;
+            // Find the CSV header that maps to the current internal field
+            const csvHeader = Object.keys(HEADER_MAPPING).find(
+              (header) => HEADER_MAPPING[header] === field
+            );
+
+            if (csvHeader && headers.includes(csvHeader)) {
+              initialMapping[field] = csvHeader;
             }
           });
           setMapping(initialMapping);
@@ -118,12 +127,8 @@ const CsvUploadMapper: React.FC<CsvUploadMapperProps> = ({
       if (response.ok) {
         // Parse the response as JSON
         const data = await response.json();
-        console.log(data.data);
         setId(data.data.transactionsDataId);
-        setData({
-          summary: data.data.summary,
-          transactions: data.data.transactions,
-        });
+        setData(data.data);
         localStorage.setItem("transactionsId", data.data.transactionsDataId);
       } else {
         alert(
@@ -202,7 +207,7 @@ const CsvUploadMapper: React.FC<CsvUploadMapperProps> = ({
             <button
               type="submit"
               disabled={!isFormValid}
-              className={`mt-2 ${
+              className={`mt-2 button ${
                 isFormValid
                   ? "bg-blue-500 text-white cursor-pointer"
                   : "bg-gray-300 text-gray-700 cursor-not-allowed"

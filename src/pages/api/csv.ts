@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { NextApiRequest, NextApiResponse } from "next";
 import { handlePostCsv } from "@/services/api/csv/handlePostCsv";
-import { CsvData } from "@/models/types";
+import { TransactionsData } from "@/models/types";
 import { handleGetCsv } from "@/services/api/csv/handleGetCsv";
+import { handleRemoveCsv } from "@/services/api/csv/handleRemoveCsv";
 
 export const config = {
   api: {
@@ -12,7 +13,7 @@ export const config = {
 
 type ResponseData = {
   message: string;
-  data?: CsvData;
+  data?: TransactionsData;
 };
 
 export default async function handler(
@@ -23,6 +24,8 @@ export default async function handler(
     await handlePostCsv(req, res);
   } else if (req.method === "GET") {
     await handleGetCsv(req, res);
+  } else if (req.method === "DELETE") {
+    await handleRemoveCsv(req, res);
   } else {
     res.status(405).json({ message: "Method not allowed" });
   }

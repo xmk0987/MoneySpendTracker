@@ -5,7 +5,7 @@ import fs from "fs";
 import * as Papa from "papaparse";
 import Transaction from "@/models/Transaction";
 import Transactions from "@/models/Transactions";
-import type { CSVMapping, CsvData } from "@/models/types";
+import type { CSVMapping, TransactionsData } from "@/models/types";
 import { createTransactionsData } from "../lib/csvUtils";
 import client from "@/lib/redisDb";
 
@@ -16,8 +16,9 @@ import client from "@/lib/redisDb";
  */
 export async function processCsvFile(
   filePath: string,
-  mapping: CSVMapping
-): Promise<CsvData> {
+  mapping: CSVMapping,
+  fileName: string
+): Promise<TransactionsData> {
   return new Promise((resolve, reject) => {
     fs.readFile(filePath, "utf8", (readErr, data) => {
       if (readErr) {
@@ -41,23 +42,30 @@ export async function processCsvFile(
             totalCount: transactionsCollection.countTotal(),
             totalSpend: transactionsCollection.getTotalSpend(),
             totalReceived: transactionsCollection.getTotalReceived(),
-            monthlyAggregates: transactionsCollection.getMonthlyBudgets(),
+            budgets: {
+              yearlyAggregates: transactionsCollection.getYearlyBudgets(),
+              monthlyAggregates: transactionsCollection.getMonthlyBudgets(),
+              dailyAggregates: transactionsCollection.getDailyBudgets(),
+              yearlyType: transactionsCollection.getYearlyBudgetsByType(),
+              monthlyType: transactionsCollection.getMonthlyBudgetsByType(),
+            },
+            timeline: transactionsCollection.getTimeline(),
           };
 
           // create transactionData id
           const randomId = crypto.randomUUID();
           const transactionsDataId = `transactionsData-${randomId}`;
 
-          console.log(transactionsDataId);
           // save new hash for the transactionData
           await client.hSet(transactionsDataId, {
             transactions: JSON.stringify(transactions),
             summary: JSON.stringify(summary),
+            fileName: fileName,
           });
 
           await client.expire(transactionsDataId, 7200);
 
-          resolve({ transactions, summary, transactionsDataId });
+          resolve({ transactions, summary, transactionsDataId, fileName });
         },
         error: (error: Error) => {
           reject(error);

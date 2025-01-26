@@ -42,16 +42,28 @@ export async function handlePostCsv(
     const fileObj = Array.isArray(uploadedFile)
       ? uploadedFile[0]
       : uploadedFile;
-    const filePath = fileObj.filepath;
+
+    const filePath = fileObj.filepath || fileObj.path;
+
+    // Extracting the original file name
+    const fileName =
+      fileObj.originalFilename ||
+      fileObj.name ||
+      fileObj.newFilename ||
+      "unknown";
+
+    console.log("File Path:", filePath);
+    console.log("Original File Name:", fileName);
 
     const { transactions, summary, transactionsDataId } = await processCsvFile(
       filePath,
-      mapping
+      mapping,
+      fileName
     );
 
     res.status(200).json({
       message: "CSV processed successfully!",
-      data: { transactions, summary, transactionsDataId },
+      data: { transactions, summary, transactionsDataId, fileName },
     });
   } catch (err: unknown) {
     console.error("Error processing form data:", err);

@@ -10,15 +10,29 @@ export interface CSVMapping {
 }
 
 export interface TransactionsData {
+  transactionsDataId: string;
+  fileName: string;
   transactions: Transaction[];
   summary: {
+    timeline: {
+      startDate: string | null;
+      endDate: string | null;
+    };
     totalCount: number;
     totalSpend: number;
     totalReceived: number;
-    monthlyAggregates: Record<string, { spend: number; received: number }>;
+    budgets: {
+      yearlyAggregates: Record<string, { spend: number; received: number }>;
+      monthlyAggregates: Record<string, { spend: number; received: number }>;
+      dailyAggregates: Record<string, { spend: number; received: number }>;
+      yearlyType: Record<
+        string,
+        Record<string, { spend: number; received: number }>
+      >;
+      monthlyType: Record<
+        string,
+        Record<string, { spend: number; received: number }>
+      >;
+    };
   };
-}
-
-export interface CsvData extends TransactionsData {
-  transactionsDataId: string;
 }
