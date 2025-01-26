@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import CsvUploadMapper from "../components/CSVUploader/CSVUploader";
 import { TransactionsData } from "@/models/types";
-import Dashboard from "./dashboard/page";
+import Dashboard from "../components/Dashboard/Dashboard";
 import Loader from "@/components/Loader/Loader";
 
 export default function Home() {
