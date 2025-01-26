@@ -2,6 +2,8 @@
 
 A web application that allows you to import your bank statement as an csv. If its suitable for the application you can use the dashboard to navigate how much you have spend/received in different time frames and also see interesting statistics about where do you use most of your money and what type of payment is your most used payment.
 
+Currently only optimized for desktop.
+
 See different kinds of graphs and finally get your spending in control.
 
 ## Live
