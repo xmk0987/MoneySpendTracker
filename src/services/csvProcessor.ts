@@ -37,14 +37,6 @@ export async function processCsvFile(
             .map((props) => Transaction.tryCreate(props))
             .filter((tx): tx is Transaction => tx !== null);
 
-          // Categorize each transaction
-          /*           for (const tx of transactions) {
-            await tx.categorizeTransaction();
-            console.log(
-              `Transaction from ${tx.sender} of $${tx.total} categorized as ${tx.category}`
-            );
-          } */
-
           const transactionsCollection = new Transactions(transactions);
           const summary = {
             totalCount: transactionsCollection.countTotal(),

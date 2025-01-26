@@ -52,9 +52,6 @@ export async function handlePostCsv(
       fileObj.newFilename ||
       "unknown";
 
-    console.log("File Path:", filePath);
-    console.log("Original File Name:", fileName);
-
     const { transactions, summary, transactionsDataId } = await processCsvFile(
       filePath,
       mapping,

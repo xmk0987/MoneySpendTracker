@@ -13,13 +13,10 @@ interface PieChartProps {
 Chart.register(ArcElement, Tooltip, Legend);
 
 const PieChart: React.FC<PieChartProps> = ({ data }) => {
-  console.log(data);
 
   const sortedData = Object.entries(data.summary.categories.receiver)
     .sort(([, a], [, b]) => b - a)
     .slice(0, 10);
-
-  console.log(sortedData);
 
   const labels = sortedData.map(([key]) => capitalizeFirstLetter(key));
   const values = sortedData.map(([, value]) => value);
