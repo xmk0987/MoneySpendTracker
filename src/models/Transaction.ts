@@ -3,42 +3,31 @@ import { parse, isValid } from "date-fns";
 
 export interface TransactionProps {
   date_created: string;
-  date_payed: string;
   total: string;
-  type_of_transaction: string;
   sender: string;
-  receiver: string;
+  payerNameOrTitle: string;
 }
 
 export default class Transaction {
   dateCreated: Date;
-  datePayed: Date;
   total: number;
-  typeOfTransaction: string;
   sender: string;
-  receiver: string;
-  category?: string;
+  payerNameOrTitle: string;
 
   constructor({
     date_created,
-    date_payed,
     total,
-    type_of_transaction,
     sender,
-    receiver,
+    payerNameOrTitle,
   }: TransactionProps) {
     // Parse and validate dates using the flexible parser.
     const parsedCreated = Transaction.parseDateFlexible(date_created);
-    const parsedPayed = Transaction.parseDateFlexible(date_payed);
 
-    if (!parsedCreated || !parsedPayed) {
-      throw new Error(
-        `Invalid date(s). date_created: ${date_created}, date_payed: ${date_payed}`
-      );
+    if (!parsedCreated) {
+      throw new Error(`Invalid date(s). date_created: ${date_created}`);
     }
 
     this.dateCreated = parsedCreated;
-    this.datePayed = parsedPayed;
 
     const parsedTotal = Transaction.parseTotal(total);
 
@@ -47,10 +36,8 @@ export default class Transaction {
     }
 
     this.total = parsedTotal;
-
-    this.typeOfTransaction = type_of_transaction;
     this.sender = sender;
-    this.receiver = receiver;
+    this.payerNameOrTitle = payerNameOrTitle;
   }
 
   // Factory method that attempts to create a Transaction.
@@ -70,13 +57,14 @@ export default class Transaction {
    */
   static parseDateFlexible(dateStr: string): Date | null {
     const formats = [
-      "dd-mm-yyyy",
+      "dd-MM-yyyy", // e.g. "22-01-2025"
       "dd.MM.yyyy", // e.g. "22.01.2025"
       "yyyy-MM-dd", // e.g. "2025-01-22"
       "MM/dd/yyyy", // e.g. "01/22/2025"
       "dd/MM/yyyy", // e.g. "22/01/2025"
       "MMM dd, yyyy", // e.g. "Jan 22, 2025"
       "dd MMM yyyy", // e.g. "22 Jan 2025"
+      "yyyy/MM/dd", // e.g. "2025/01/05"
     ];
 
     if (!dateStr) {

@@ -55,15 +55,18 @@ const CsvUploadMapper: React.FC<CsvUploadMapperProps> = ({
           // Auto-map if CSV headers match the required fields.
           const initialMapping: Partial<CSVMapping> = {};
           REQUIRED_CSV_FIELDS.forEach((field) => {
-            // Find the CSV header that maps to the current internal field
+            // Find the FIRST CSV header that both maps to 'field'
+            // AND is actually present in `headers`.
             const csvHeader = Object.keys(HEADER_MAPPING).find(
-              (header) => HEADER_MAPPING[header] === field
+              (header) =>
+                HEADER_MAPPING[header] === field && headers.includes(header)
             );
 
-            if (csvHeader && headers.includes(csvHeader)) {
+            if (csvHeader) {
               initialMapping[field] = csvHeader;
             }
           });
+
           setMapping(initialMapping);
         },
         error: (error) => {

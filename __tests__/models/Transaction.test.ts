@@ -1,7 +1,6 @@
 import Transaction from "@/models/Transaction";
 import {
   invalidDateCreated,
-  invalidDatePayed,
   invalidTotal,
   validTransaction,
 } from "../../mockData";
@@ -15,11 +14,9 @@ describe("Transaction", () => {
 
       const expectedTransaction = {
         dateCreated: new Date("2025-01-21T22:00:00.000Z"),
-        datePayed: new Date("2025-01-20T22:00:00.000Z"),
         total: -9.15,
-        typeOfTransaction: "KORTTIOSTO",
         sender: "ONNI VITIKAINEN",
-        receiver: "GROCERY STORE",
+        payerNameOrTitle: "GROCERY STORE",
       };
 
       expect(transaction).toEqual(expectedTransaction);
@@ -27,11 +24,6 @@ describe("Transaction", () => {
 
     test("it handles invalid date created", () => {
       const transaction = Transaction.tryCreate(invalidDateCreated);
-      expect(transaction).toBeNull();
-    });
-
-    test("it handles invalid date payed", () => {
-      const transaction = Transaction.tryCreate(invalidDatePayed);
       expect(transaction).toBeNull();
     });
 

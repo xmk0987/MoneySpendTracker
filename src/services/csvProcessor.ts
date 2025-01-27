@@ -6,7 +6,7 @@ import * as Papa from "papaparse";
 import Transaction from "@/models/Transaction";
 import Transactions from "@/models/Transactions";
 import type { CSVMapping, TransactionsData } from "@/models/types";
-import { createTransactionsData } from "../lib/csvUtils";
+import { createTransactionsData } from "../utils/csvUtils";
 import client from "@/lib/redisDb";
 
 /**
@@ -48,7 +48,8 @@ export async function processCsvFile(
               dailyAggregates: transactionsCollection.getDailyBudgets(),
             },
             categories: {
-              receiver: transactionsCollection.getReceiverCategory(),
+              payerNameOrTitle:
+                transactionsCollection.getPayerNameOrTitleCategory(),
             },
             timeline: transactionsCollection.getTimeline(),
           };

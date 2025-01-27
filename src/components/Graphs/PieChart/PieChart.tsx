@@ -13,8 +13,7 @@ interface PieChartProps {
 Chart.register(ArcElement, Tooltip, Legend);
 
 const PieChart: React.FC<PieChartProps> = ({ data }) => {
-
-  const sortedData = Object.entries(data.summary.categories.receiver)
+  const sortedData = Object.entries(data.summary.categories.payerNameOrTitle)
     .sort(([, a], [, b]) => b - a)
     .slice(0, 10);
 

@@ -1,5 +1,5 @@
 // src/models/Transactions.ts
-import { normalizeReceiver } from "@/utils/helperFunctions";
+import { normalizePayerTitle } from "@/utils/helperFunctions";
 import Transaction from "./Transaction";
 import { getISOWeek } from "@/utils/dates";
 
@@ -33,37 +33,37 @@ export default class Transactions {
     return Number(total.toFixed(2));
   }
 
-  // Yearly Aggregation based on datePayed
+  // Yearly Aggregation based on dateCreated
   getYearlyBudgets(): Record<string, { spend: number; received: number }> {
-    return this.aggregateBudgets((tx) => `${tx.datePayed.getFullYear()}`);
+    return this.aggregateBudgets((tx) => `${tx.dateCreated.getFullYear()}`);
   }
 
-  // Monthly Aggregation based on datePayed
+  // Monthly Aggregation based on dateCreated
   getMonthlyBudgets(): Record<string, { spend: number; received: number }> {
     return this.aggregateBudgets(
       (tx) =>
-        `${tx.datePayed.getFullYear()}-${(tx.datePayed.getMonth() + 1)
+        `${tx.dateCreated.getFullYear()}-${(tx.dateCreated.getMonth() + 1)
           .toString()
           .padStart(2, "0")}`
     );
   }
 
-  // Weekly Aggregation based on datePayed
+  // Weekly Aggregation based on dateCreated
   getWeeklyBudgets(): Record<string, { spend: number; received: number }> {
     return this.aggregateBudgets((tx) => {
-      const year = tx.datePayed.getFullYear();
-      const week = getISOWeek(tx.datePayed);
+      const year = tx.dateCreated.getFullYear();
+      const week = getISOWeek(tx.dateCreated);
       return `${year}-W${week.toString().padStart(2, "0")}`;
     });
   }
 
-  // Daily Aggregation based on datePayed
+  // Daily Aggregation based on dateCreated
   getDailyBudgets(): Record<string, { spend: number; received: number }> {
     return this.aggregateBudgets(
       (tx) =>
-        `${tx.datePayed.getFullYear()}-${(tx.datePayed.getMonth() + 1)
+        `${tx.dateCreated.getFullYear()}-${(tx.dateCreated.getMonth() + 1)
           .toString()
-          .padStart(2, "0")}-${tx.datePayed
+          .padStart(2, "0")}-${tx.dateCreated
           .getDate()
           .toString()
           .padStart(2, "0")}`
@@ -75,7 +75,7 @@ export default class Transactions {
       return { startDate: null, endDate: null };
     }
 
-    const dates = this.transactions.map((tx) => tx.datePayed.getTime());
+    const dates = this.transactions.map((tx) => tx.dateCreated.getTime());
     const minTimestamp = Math.min(...dates);
     const maxTimestamp = Math.max(...dates);
 
@@ -86,19 +86,24 @@ export default class Transactions {
   }
 
   /**
-   * Groups transactions by receiver and sums the total amount per receiver.
-   * Sorts the receivers in descending order based on the total amount.
-   * @returns A Record where the key is the receiver's name (capitalized) and the value is the total amount.
+   * Groups transactions by payerNameOrTitle and sums the total amount per payerNameOrTitle.
+   * Sorts the payerNameOrTitles in descending order based on the total amount.
+   * @returns A Record where the key is the payerNameOrTitle's name (capitalized) and the value is the total amount.
    */
-  getReceiverCategory(): Record<string, number> {
+  getPayerNameOrTitleCategory(): Record<string, number> {
     const groupedMap: Map<string, number> = new Map();
 
     this.transactions.forEach((transaction) => {
-      const receiver = normalizeReceiver(transaction.receiver).split(" ")[0];
+      const payerNameOrTitle = normalizePayerTitle(
+        transaction.payerNameOrTitle
+      );
 
-      const currentTotal = groupedMap.get(receiver) ?? 0;
+      const currentTotal = groupedMap.get(payerNameOrTitle) ?? 0;
 
-      groupedMap.set(receiver, currentTotal + Math.abs(transaction.total));
+      groupedMap.set(
+        payerNameOrTitle,
+        currentTotal + Math.abs(transaction.total)
+      );
     });
 
     const groupedData = Object.fromEntries(

@@ -11,11 +11,12 @@ export function capitalizeFirstLetter(str: string): string {
   );
 }
 
-// Utility function to normalize receiver names
-export const normalizeReceiver = (receiver: string): string => {
-  return receiver
+// Utility function to normalize payerNameOrTitle names
+export const normalizePayerTitle = (payerNameOrTitle: string): string => {
+  return payerNameOrTitle
     .toLowerCase()
-    .replace(/[^a-z\s]/g, " ")
+    .replace(/[^a-zäöå\s0-9]/g, " ")
+    .replace(/[0-9]+/g, " ")
     .replace(/\s+/g, " ")
     .trim();
 };

@@ -1,6 +1,6 @@
 import {
   capitalizeFirstLetter,
-  normalizeReceiver,
+  normalizePayerTitle,
 } from "@/utils/helperFunctions";
 import { describe, expect, test } from "@jest/globals";
 
@@ -32,30 +32,30 @@ describe("Helper functions from utils", () => {
     });
   });
 
-  describe("normalizeReceiver", () => {
-    test("it normalizes the receiver correctly separated with .", () => {
-      const receiver = " John.Doe ";
-      expect(normalizeReceiver(receiver)).toBe("john doe");
+  describe("normalizePayerTitle", () => {
+    test("it normalizes the payerNameOrTitle correctly separated with .", () => {
+      const payerNameOrTitle = " John.Doe ";
+      expect(normalizePayerTitle(payerNameOrTitle)).toBe("john doe");
     });
 
-    test("it normalizes the receiver correctly separated with ' '", () => {
-      const receiver = " John Doe ";
-      expect(normalizeReceiver(receiver)).toBe("john doe");
+    test("it normalizes the payerNameOrTitle correctly separated with ' '", () => {
+      const payerNameOrTitle = " John Doe ";
+      expect(normalizePayerTitle(payerNameOrTitle)).toBe("john doe");
     });
 
-    test("it normalizes receiver with multiple special characters", () => {
-      const receiver = " John.!?@ Doe# ";
-      expect(normalizeReceiver(receiver)).toBe("john doe");
+    test("it normalizes payerNameOrTitle with multiple special characters", () => {
+      const payerNameOrTitle = " John.!?@ Doe# ";
+      expect(normalizePayerTitle(payerNameOrTitle)).toBe("john doe");
     });
 
-    test("it normalizes the receiver that contains numbers correctly", () => {
-      const receiver = " John43Doe444 ";
-      expect(normalizeReceiver(receiver)).toBe("john doe");
+    test("it normalizes the payerNameOrTitle that contains numbers correctly", () => {
+      const payerNameOrTitle = " John43Doe444 ";
+      expect(normalizePayerTitle(payerNameOrTitle)).toBe("john doe");
     });
 
-    test("it normalizes the receiver correctly when it contains numbers and special characters", () => {
-      const receiver = " John.Doe - 888";
-      expect(normalizeReceiver(receiver)).toBe("john doe");
+    test("it normalizes the payerNameOrTitle correctly when it contains numbers and special characters", () => {
+      const payerNameOrTitle = " John.Doe - 888";
+      expect(normalizePayerTitle(payerNameOrTitle)).toBe("john doe");
     });
   });
 });
