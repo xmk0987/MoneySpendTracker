@@ -38,6 +38,7 @@ export async function processCsvFile(
             .filter((tx): tx is Transaction => tx !== null);
 
           const transactionsCollection = new Transactions(transactions);
+
           const summary = {
             totalCount: transactionsCollection.countTotal(),
             totalSpend: transactionsCollection.getTotalSpend(),

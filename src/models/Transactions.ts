@@ -1,5 +1,5 @@
 // src/models/Transactions.ts
-import { normalizePayerTitle } from "@/utils/helperFunctions";
+import { calculateSimilarityDiceCoefficient } from "@/utils/stringSimilarity";
 import Transaction from "./Transaction";
 import { getISOWeek } from "@/utils/dates";
 
@@ -86,34 +86,81 @@ export default class Transactions {
   }
 
   /**
-   * Groups transactions by payerNameOrTitle and sums the total amount per payerNameOrTitle.
-   * Sorts the payerNameOrTitles in descending order based on the total amount.
-   * @returns A Record where the key is the payerNameOrTitle's name (capitalized) and the value is the total amount.
+   * Groups transactions by payerNameOrTitle, normalizes names, and merges similar ones using the Dice Coefficient.
+   * Separates the transactions into 'spend' and 'earned' categories.
+   * @returns An object containing separate records for spend and earned transactions.
    */
-  getPayerNameOrTitleCategory(): Record<string, number> {
-    const groupedMap: Map<string, number> = new Map();
+  getPayerNameOrTitleCategory(): {
+    spend: Record<string, number>;
+    earned: Record<string, number>;
+  } {
+    const spendMap: Map<string, number> = new Map();
+    const earnedMap: Map<string, number> = new Map();
 
+    // Group transactions by name
     this.transactions.forEach((transaction) => {
-      const payerNameOrTitle = normalizePayerTitle(
-        transaction.payerNameOrTitle
-      );
+      const payerNameOrTitle = transaction.payerNameOrTitle;
+      const absoluteTotal = Math.abs(transaction.total);
 
-      const currentTotal = groupedMap.get(payerNameOrTitle) ?? 0;
-
-      groupedMap.set(
-        payerNameOrTitle,
-        currentTotal + Math.abs(transaction.total)
-      );
+      if (transaction.total < 0) {
+        // Categorize as spending
+        spendMap.set(
+          payerNameOrTitle,
+          (spendMap.get(payerNameOrTitle) ?? 0) + absoluteTotal
+        );
+      } else {
+        // Categorize as earned
+        earnedMap.set(
+          payerNameOrTitle,
+          (earnedMap.get(payerNameOrTitle) ?? 0) + absoluteTotal
+        );
+      }
     });
 
-    const groupedData = Object.fromEntries(
-      Array.from(groupedMap.entries()).map(([key, value]) => [
-        key,
-        parseFloat(value.toFixed(2)),
-      ])
-    );
+    // Function to merge similar names using Dice Coefficient
+    const mergeSimilarNames = (
+      map: Map<string, number>
+    ): Map<string, number> => {
+      const entries = Array.from(map.entries());
+      const mergedMap: Map<string, number> = new Map();
 
-    return groupedData;
+      for (let i = 0; i < entries.length; i++) {
+        const [key, value] = entries[i];
+        let mergedKey = key;
+
+        for (const [existingKey, existingValue] of mergedMap.entries()) {
+          if (calculateSimilarityDiceCoefficient(key, existingKey) > 0.7) {
+            mergedMap.set(existingKey, existingValue + value);
+            mergedKey = existingKey;
+            break;
+          }
+        }
+
+        if (!mergedMap.has(mergedKey)) {
+          mergedMap.set(mergedKey, value);
+        }
+      }
+
+      return mergedMap;
+    };
+
+    const mergedSpendMap = mergeSimilarNames(spendMap);
+    const mergedEarnedMap = mergeSimilarNames(earnedMap);
+
+    return {
+      spend: Object.fromEntries(
+        Array.from(mergedSpendMap.entries()).map(([key, value]) => [
+          key,
+          parseFloat(value.toFixed(2)),
+        ])
+      ),
+      earned: Object.fromEntries(
+        Array.from(mergedEarnedMap.entries()).map(([key, value]) => [
+          key,
+          parseFloat(value.toFixed(2)),
+        ])
+      ),
+    };
   }
 
   private aggregateBudgets(

@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { Chart, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
 import { TransactionsData } from "@/models/types";
 import styles from "../Graph.module.css";
 import { getPieChartData, getPieChartOptions } from "./pieChartConfig";
-import { capitalizeFirstLetter } from "@/utils/helperFunctions";
+import { capitalizeFirstLetter } from "@/utils/stringSimilarity";
 
 interface PieChartProps {
   data: TransactionsData;
@@ -13,7 +13,13 @@ interface PieChartProps {
 Chart.register(ArcElement, Tooltip, Legend);
 
 const PieChart: React.FC<PieChartProps> = ({ data }) => {
-  const sortedData = Object.entries(data.summary.categories.payerNameOrTitle)
+  const [category, setCategory] = useState<"spend" | "earned">("spend");
+
+  // Get data based on the selected category
+  const selectedData = data.summary.categories.payerNameOrTitle[category];
+
+  // Process and sort top 10 transactions
+  const sortedData = Object.entries(selectedData)
     .sort(([, a], [, b]) => b - a)
     .slice(0, 10);
 
@@ -33,12 +39,28 @@ const PieChart: React.FC<PieChartProps> = ({ data }) => {
   ];
 
   const pieChartData = getPieChartData(labels, values, colors);
-  const pieChartOptions = getPieChartOptions("expenses");
+  const pieChartOptions = getPieChartOptions(
+    category === "spend" ? "Expenses" : "Earnings"
+  );
 
   return (
     <div className={styles.graphBox}>
       <div className={styles.barHeader}>
-        <p>Transaction Distribution - Top 10</p>
+        <p>
+          Transaction Distribution - Top 10 (
+          {category === "spend" ? "Spend" : "Earned"})
+        </p>
+        <div className={styles.buttonGroup}>
+          <button
+            key={category}
+            onClick={() =>
+              setCategory(category === "spend" ? "earned" : "spend")
+            }
+            className={`${styles.button} `}
+          >
+            {category === "spend" ? "Show Earned" : "Show Spend"}
+          </button>
+        </div>
       </div>
       <div className={styles.content}>
         <Pie data={pieChartData} options={pieChartOptions} />

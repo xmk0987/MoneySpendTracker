@@ -1,4 +1,4 @@
-import { capitalizeFirstLetter } from "@/utils/helperFunctions";
+import { capitalizeFirstLetter } from "@/utils/stringSimilarity";
 import { ChartOptions, ChartData } from "chart.js";
 
 // Define the structure for the dataset

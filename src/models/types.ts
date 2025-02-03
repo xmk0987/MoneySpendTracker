@@ -25,7 +25,10 @@ export interface TransactionsData {
       dailyAggregates: Record<string, { spend: number; received: number }>;
     };
     categories: {
-      payerNameOrTitle: Record<string, number>;
+      payerNameOrTitle: {
+        spend: Record<string, number>;
+        earned: Record<string, number>;
+      };
     };
   };
 }
