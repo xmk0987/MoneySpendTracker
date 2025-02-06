@@ -8,7 +8,7 @@ See different kinds of graphs and finally get your spending in control.
 
 ## Live
 
-The web application can be tried through the browser from: https://cash-trail.vercel.app/
+The web application can be tried through the browser from: https://www.moneyspendtracker.com/
 
 ## Trying out Locally
 
