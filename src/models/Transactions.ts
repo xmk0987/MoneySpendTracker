@@ -99,11 +99,16 @@ export default class Transactions {
 
     // Group transactions by name
     this.transactions.forEach((transaction) => {
-      const payerNameOrTitle = transaction.payerNameOrTitle;
-      const sender = transaction.sender;
-      const absoluteTotal = Math.abs(transaction.total);
+      const { sender, payerNameOrTitle, total } = transaction;
+      const absoluteTotal = Math.abs(total);
 
-      if (transaction.total < 0) {
+      // Normalize sender by removing spaces
+      const normalizedSender = sender.replace(/\s+/g, "");
+
+      // Check if sender is a bank account number (IBAN-like)
+      const isBankAccount = /^[A-Z]{2}\d{10,30}$/.test(normalizedSender);
+
+      if (total < 0) {
         // Categorize as spending
         spendMap.set(
           payerNameOrTitle,
@@ -111,10 +116,10 @@ export default class Transactions {
         );
       } else {
         // Categorize as earned
-        earnedMap.set(
-          sender,
-          (earnedMap.get(sender) ?? 0) + absoluteTotal
-        );
+        const key =
+          isBankAccount || normalizedSender === "" ? payerNameOrTitle : sender;
+
+        earnedMap.set(key, (earnedMap.get(key) ?? 0) + absoluteTotal);
       }
     });
 
