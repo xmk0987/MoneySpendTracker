@@ -100,6 +100,7 @@ export default class Transactions {
     // Group transactions by name
     this.transactions.forEach((transaction) => {
       const payerNameOrTitle = transaction.payerNameOrTitle;
+      const sender = transaction.sender;
       const absoluteTotal = Math.abs(transaction.total);
 
       if (transaction.total < 0) {
@@ -111,8 +112,8 @@ export default class Transactions {
       } else {
         // Categorize as earned
         earnedMap.set(
-          payerNameOrTitle,
-          (earnedMap.get(payerNameOrTitle) ?? 0) + absoluteTotal
+          sender,
+          (earnedMap.get(sender) ?? 0) + absoluteTotal
         );
       }
     });
