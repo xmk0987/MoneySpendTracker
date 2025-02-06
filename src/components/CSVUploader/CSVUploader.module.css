@@ -22,6 +22,11 @@
   margin: auto;
   align-items: center;
   min-width: 250px;
+  max-width: 500px;
+}
+
+.content p {
+  text-align: center;
 }
 
 .fileInput {

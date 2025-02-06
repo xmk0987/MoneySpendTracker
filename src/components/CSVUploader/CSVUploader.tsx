@@ -10,6 +10,8 @@ import {
 import styles from "./CSVUploader.module.css";
 import PrimaryButton from "../PrimaryButton/PrimaryButton";
 import Loader from "../Loader/Loader";
+import demo from "@/assets/images/demo.png";
+import Image from "next/image";
 
 interface CsvUploadMapperProps {
   setId: (id: string) => void;
@@ -55,8 +57,6 @@ const CsvUploadMapper: React.FC<CsvUploadMapperProps> = ({
           // Auto-map if CSV headers match the required fields.
           const initialMapping: Partial<CSVMapping> = {};
           REQUIRED_CSV_FIELDS.forEach((field) => {
-            // Find the FIRST CSV header that both maps to 'field'
-            // AND is actually present in `headers`.
             const csvHeader = Object.keys(HEADER_MAPPING).find(
               (header) =>
                 HEADER_MAPPING[header] === field && headers.includes(header)
@@ -133,7 +133,6 @@ const CsvUploadMapper: React.FC<CsvUploadMapperProps> = ({
       });
 
       if (response.ok) {
-        // Parse the response as JSON
         const data = await response.json();
         setId(data.data.transactionsDataId);
         setData(data.data);
@@ -164,8 +163,7 @@ const CsvUploadMapper: React.FC<CsvUploadMapperProps> = ({
         <Loader />
       ) : (
         <div className={styles["content"]}>
-          <h1 className="text-xl">CashTrail</h1>
-
+          <h1 className="text-xl">Money Spend Tracker</h1>
           {/* CSV file upload input */}
           {/* Hidden file input */}
           <input
@@ -174,7 +172,7 @@ const CsvUploadMapper: React.FC<CsvUploadMapperProps> = ({
             accept=".csv"
             ref={fileInputRef}
             onChange={handleFileChange}
-            className={styles.fileInput} // Apply styles to hide the file input
+            className={styles.fileInput}
           />
           {!csvFile ? <p>No file selected</p> : <p>{csvFile.name}</p>}
 
@@ -234,6 +232,16 @@ const CsvUploadMapper: React.FC<CsvUploadMapperProps> = ({
                   Submit CSV
                 </button>
               </form>
+            </>
+          )}
+          {!csvFile && (
+            <>
+              <Image src={demo} alt={"Bank transactions dashboard"} />
+              <p>
+                Easily upload your bank statements and get a smart dashboard to
+                track your expenses, spending, and budget insights. Improve your
+                financial health today!
+              </p>
             </>
           )}
         </div>
