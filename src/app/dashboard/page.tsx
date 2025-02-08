@@ -1,6 +1,6 @@
 "use client";
 import { TransactionsData } from "@/models/types";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import Loader from "@/components/Loader/Loader";
 import Dashboard from "@/components/Dashboard/Dashboard";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -60,7 +60,11 @@ const DashboardPage = () => {
 
   if (!transactionsData) return <Loader />;
 
-  return <Dashboard data={transactionsData} changeCsv={changeFile} />;
+  return (
+    <Suspense fallback={<Loader />}>
+      <Dashboard data={transactionsData} changeCsv={changeFile} />
+    </Suspense>
+  );
 };
 
 export default DashboardPage;
