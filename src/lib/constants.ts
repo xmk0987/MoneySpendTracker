@@ -30,22 +30,4 @@ export const HEADER_MAPPING: { [key: string]: (keyof CSVMapping)[] } = {
   Otsikko: ["receiverNameOrTitle"],
   "Maksaja tai saaja": ["sender", "receiverNameOrTitle"], // Can be sender or receiver
   "Saaja/Maksaja": ["sender", "receiverNameOrTitle"],
-
-  // English Headers
-  "Date Created": ["date_created"],
-  "Creation Date": ["date_created"],
-  "Entry Date": ["date_created"],
-
-  Total: ["total"],
-  Amount: ["total"],
-  Sum: ["total"],
-
-  Sender: ["sender"],
-  Payer: ["sender"],
-  "Sender Name": ["sender"],
-
-  Title: ["receiverNameOrTitle"],
-  Description: ["receiverNameOrTitle"],
-  Payee: ["receiverNameOrTitle"],
-  Recipient: ["receiverNameOrTitle"],
 };
