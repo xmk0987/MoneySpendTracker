@@ -28,6 +28,12 @@ export default function DashboardContent() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
+  const resetData = () => {
+    localStorage.removeItem("transactionsId");
+    setTransactionsData(null);
+    router.push("/");
+  };
+
   /**
    * Fetches transactions data from the server using the provided id.
    * If data is already fetched, it does nothing.
@@ -50,8 +56,7 @@ export default function DashboardContent() {
       setTransactionsData(data.data);
     } catch (error) {
       console.error("Error fetching transactions data:", error);
-      setTransactionsData(null);
-      router.push("/");
+      resetData();
     }
   };
 
@@ -68,9 +73,8 @@ export default function DashboardContent() {
       if (!response.ok) {
         throw new Error("Failed to delete csv data");
       }
-      setTransactionsData(null);
-      localStorage.removeItem("transactionsId");
-      router.push("/");
+
+      resetData();
     } catch (error) {
       console.error("Error removing csv", error);
     }
