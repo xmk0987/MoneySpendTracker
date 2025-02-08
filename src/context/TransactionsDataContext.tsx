@@ -8,7 +8,7 @@ import { TransactionsData } from "@/models/types";
 
 interface TransactionsDataContextValue {
   transactionsData: TransactionsData;
-  changeFile: () => Promise<void>;
+  removeFile: () => Promise<void>;
 }
 
 const TransactionsDataContext = createContext<
@@ -63,7 +63,7 @@ export const TransactionsDataProvider: React.FC<{
     }
   };
 
-  const changeFile = async () => {
+  const removeFile = async () => {
     if (!id) return;
     try {
       const response = await fetch(`/api/csv?id=${encodeURIComponent(id)}`, {
@@ -82,7 +82,7 @@ export const TransactionsDataProvider: React.FC<{
   if (!transactionsData) return <Loader />;
 
   return (
-    <TransactionsDataContext.Provider value={{ transactionsData, changeFile }}>
+    <TransactionsDataContext.Provider value={{ transactionsData, removeFile }}>
       {children}
     </TransactionsDataContext.Provider>
   );

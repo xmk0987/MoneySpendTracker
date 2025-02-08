@@ -23,12 +23,12 @@ export function formatDateRange(startDate: string, endDate: string): string {
 
   // Extract day, month, and last two digits of the year for start date
   const startDay = start.getDate();
-  const startMonth = (start.getMonth() + 1).toString().padStart(2, "0"); 
+  const startMonth = (start.getMonth() + 1).toString().padStart(2, "0");
   const startYear = (start.getFullYear() % 100).toString().padStart(2, "0");
 
   // Extract day, month, and last two digits of the year for end date
   const endDay = end.getDate();
-  const endMonth = (end.getMonth() + 1).toString().padStart(2, "0"); 
+  const endMonth = (end.getMonth() + 1).toString().padStart(2, "0");
   const endYear = (end.getFullYear() % 100).toString().padStart(2, "0");
 
   // Check if both dates are in the same month and year
@@ -42,6 +42,27 @@ export function formatDateRange(startDate: string, endDate: string): string {
     // Format: "30.12.24 - 21.01.25"
     return `${startDay}.${startMonth}.${startYear} - ${endDay}.${endMonth}.${endYear}`;
   }
+}
+
+/**
+ * Formats a Date object into the format "DD.MM.YY".
+ *
+ * @param date - The Date object to format.
+ * @returns A formatted date string in "DD.MM.YY" format.
+ */
+export function formatDate(date: Date): string {
+  // Get the day of the month and pad with a leading zero if needed.
+  const newDate = new Date(date);
+  const day = newDate.getDate().toString().padStart(2, "0");
+
+  // getMonth() returns a zero-indexed month, so add 1 and pad with a leading zero if needed.
+  const month = (newDate.getMonth() + 1).toString().padStart(2, "0");
+
+  // Get the full year and then slice out the last two characters.
+  const year = newDate.getFullYear().toString().slice(-2);
+
+  // Combine the parts with dots in between.
+  return `${day}.${month}.${year}`;
 }
 
 // Helper function to get ISO week number

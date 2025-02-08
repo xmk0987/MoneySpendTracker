@@ -1,9 +1,8 @@
 .outerContainer {
-  flex: 1;
+  min-height: 100vh;
   width: 100%;
-  height: 100%;
   overflow: scroll;
-  padding: 5px;
+  padding: var(--gutter);
   display: flex;
   align-items: flex-start;
   justify-content: center;

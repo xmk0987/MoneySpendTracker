@@ -1,0 +1,39 @@
+.tableWrapper {
+  max-height: 90vh;
+  width: 100%;
+  overflow-y: scroll;
+}
+
+.table {
+  width: 100%;
+  background-color: var(--main-background);
+  border-collapse: collapse;
+}
+
+.table thead th {
+  background-color: var(--main-background);
+  border-bottom: var(--light-border);
+  position: sticky;
+  top: 0px;
+  text-align: start;
+  padding: 10px;
+  cursor: pointer;
+  z-index: 6; /* high enough to be on top */
+}
+
+.headerItem {
+  width: 100%;
+  height: 100%;
+  display: inline-flex;
+  justify-content: space-between;
+}
+
+.headerItem:hover,
+.headerItem:hover svg {
+  color: var(--accent2);
+  fill: var(--accent2) !important;
+}
+
+.table tbody tr td {
+  padding: 10px;
+}

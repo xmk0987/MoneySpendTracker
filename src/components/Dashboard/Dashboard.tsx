@@ -9,10 +9,9 @@ import PieChart from "@/components/Graphs/PieChart/PieChart";
 
 interface DashboardProps {
   data: TransactionsData;
-  changeCsv: (id: string) => void;
 }
 
-const Dashboard: React.FC<DashboardProps> = ({ data, changeCsv }) => {
+const Dashboard: React.FC<DashboardProps> = ({ data }) => {
   const profit = Number(
     data.summary.totalReceived - data.summary.totalSpend
   ).toFixed(2);
@@ -23,18 +22,7 @@ const Dashboard: React.FC<DashboardProps> = ({ data, changeCsv }) => {
   );
 
   return (
-    <div className={styles["dashboardContainer"]}>
-      <div className={styles["header"]}>
-        <h2 className="truncate">Dashboard</h2>
-        <div className={styles["headerOptions"]}>
-          <div className={`text-sm ${styles["currentFile"]}`}>
-            <p>{data.fileName}</p>
-            <button onClick={() => changeCsv(data.transactionsDataId)}>
-              X
-            </button>
-          </div>
-        </div>
-      </div>
+    <>
       <div className={styles["info"]}>
         <InfoBox header="Total transactions" value={data.summary.totalCount} />
         <InfoBox header="Earned" value={data.summary.totalReceived} />
@@ -50,7 +38,7 @@ const Dashboard: React.FC<DashboardProps> = ({ data, changeCsv }) => {
           <PieChart data={data} />
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

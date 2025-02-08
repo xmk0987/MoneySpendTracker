@@ -1,0 +1,47 @@
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 0 20px 0 10px;
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  height: 50px;
+  z-index: var(--highest-layer);
+  background-color: var(--main-background-light);
+  border-bottom: var(--light-border);
+}
+
+.headerOptions {
+  display: inline-flex;
+  gap: var(--gutter);
+  align-items: center;
+  font-size: 0.8rem;
+}
+
+.nav {
+  display: inline-flex;
+  align-items: center;
+  height: 100%;
+  gap: 20px;
+}
+
+.nav a {
+  font-size: 0.8rem;
+  padding: 5px 10px;
+}
+
+.active {
+  color: var(--accent2);
+}
+
+.nav a:hover {
+  color: var(--accent2);
+  text-decoration: underline;
+}
+
+.remove:hover {
+  color: var(--accent2);
+}

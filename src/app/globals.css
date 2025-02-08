@@ -4,6 +4,7 @@
 
 :root {
   --main-background: #1a1358;
+  --main-background-light: #2d2479;
   --secondary-background: #4f3e8ba1;
   --background: radial-gradient(#3829be 0%, var(--main-background) 100%);
 
@@ -23,6 +24,11 @@
   --font-size-normal: 15px;
 
   --shadow: 0px 1.8px 12px -4px white;
+
+  --max-w: 1400px;
+
+  --light-border: 0.3px solid rgba(255, 255, 255, 0.64);
+  --highest-layer: 1044;
 }
 
 *,
@@ -44,9 +50,15 @@
   scrollbar-width: none; /* Firefox */
 }
 
+html,
 body {
+  overscroll-behavior: none;
+}
+
+body {
+  min-height: 100vh;
   color: var(--text);
-  background: var(--background);
+  background: var(--background) no-repeat;
   font-family: Arial, Helvetica, sans-serif;
   font-size: var(--font-size-normal);
 }
@@ -121,4 +133,5 @@ button:disabled {
   align-items: center;
   justify-content: center;
   position: relative;
+  overflow: hidden;
 }
