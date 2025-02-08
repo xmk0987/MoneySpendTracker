@@ -2,10 +2,11 @@
 import { useEffect, useState } from "react";
 import CsvUploadMapper from "../components/CSVUploader/CSVUploader";
 import { useRouter } from "next/navigation";
+import Loader from "@/components/Loader/Loader";
 
 export default function Home() {
   const router = useRouter();
-  const [, setTransactionsDataId] = useState("");
+  const [transactionsDataId, setTransactionsDataId] = useState("");
 
   // Initialize the ID from local storage if present
   useEffect(() => {
@@ -16,5 +17,9 @@ export default function Home() {
     }
   }, [router]);
 
-  return <CsvUploadMapper setId={setTransactionsDataId} />;
+  return transactionsDataId === "" ? (
+    <CsvUploadMapper setId={setTransactionsDataId} />
+  ) : (
+    <Loader />
+  );
 }
