@@ -73,7 +73,6 @@ const CsvUploadMapper: React.FC<CsvUploadMapperProps> = ({ setId }) => {
   };
 
   const handleUploadFileClick = () => {
-    // Trigger the file input click
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }
@@ -126,7 +125,6 @@ const CsvUploadMapper: React.FC<CsvUploadMapperProps> = ({ setId }) => {
         body: formData,
       });
 
-      // After a successful CSV upload:
       if (response.ok) {
         const data = await response.json();
         setId(data.data.transactionsDataId);
@@ -143,7 +141,6 @@ const CsvUploadMapper: React.FC<CsvUploadMapperProps> = ({ setId }) => {
     }
   };
 
-  // Determine if the form is valid (all required fields are mapped)
   const isFormValid = REQUIRED_CSV_FIELDS.every(
     (field) => mapping[field as keyof CSVMapping]
   );

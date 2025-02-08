@@ -22,14 +22,14 @@ export function formatDateRange(startDate: string, endDate: string): string {
   }
 
   // Extract day, month, and last two digits of the year for start date
-  const startDay = start.getDate(); // No leading zero
-  const startMonth = (start.getMonth() + 1).toString().padStart(2, "0"); // Months are 0-based
-  const startYear = (start.getFullYear() % 100).toString().padStart(2, "0"); // Last two digits
+  const startDay = start.getDate();
+  const startMonth = (start.getMonth() + 1).toString().padStart(2, "0"); 
+  const startYear = (start.getFullYear() % 100).toString().padStart(2, "0");
 
   // Extract day, month, and last two digits of the year for end date
-  const endDay = end.getDate(); // No leading zero
-  const endMonth = (end.getMonth() + 1).toString().padStart(2, "0"); // Months are 0-based
-  const endYear = (end.getFullYear() % 100).toString().padStart(2, "0"); // Last two digits
+  const endDay = end.getDate();
+  const endMonth = (end.getMonth() + 1).toString().padStart(2, "0"); 
+  const endYear = (end.getFullYear() % 100).toString().padStart(2, "0");
 
   // Check if both dates are in the same month and year
   if (
@@ -47,7 +47,7 @@ export function formatDateRange(startDate: string, endDate: string): string {
 // Helper function to get ISO week number
 export function getISOWeek(date: Date): number {
   const tmpDate = new Date(date.valueOf());
-  const dayNumber = (date.getDay() + 6) % 7; // Monday=0, Sunday=6
+  const dayNumber = (date.getDay() + 6) % 7;
   tmpDate.setDate(tmpDate.getDate() - dayNumber + 3);
   const firstThursday = tmpDate.valueOf();
   tmpDate.setMonth(0, 1);

@@ -85,7 +85,6 @@ export default class Transaction {
    * Returns null if parsing fails.
    */
   static parseTotal(total: string): number | null {
-    // Immediately handle empty strings or nullish values
     if (!total) {
       return null;
     }

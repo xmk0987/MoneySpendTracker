@@ -3,7 +3,7 @@ import { TransactionsData } from "@/models/types";
 import React, { useState, useEffect } from "react";
 import Loader from "@/components/Loader/Loader";
 import Dashboard from "@/components/Dashboard/Dashboard";
-import { useRouter, useSearchParams } from "next/navigation"; // Both from next/navigation
+import { useRouter, useSearchParams } from "next/navigation";
 
 const DashboardPage = () => {
   const router = useRouter();
@@ -58,7 +58,7 @@ const DashboardPage = () => {
     }
   };
 
-  if (!transactionsData) return <Loader />; // Show loader while fetching
+  if (!transactionsData) return <Loader />;
 
   return <Dashboard data={transactionsData} changeCsv={changeFile} />;
 };

@@ -55,11 +55,9 @@ export async function processCsvFile(
             timeline: transactionsCollection.getTimeline(),
           };
 
-          // create transactionData id
           const randomId = crypto.randomUUID();
           const transactionsDataId = `transactionsData-${randomId}`;
 
-          // save new hash for the transactionData
           await client.hSet(transactionsDataId, {
             transactions: JSON.stringify(transactions),
             summary: JSON.stringify(summary),
