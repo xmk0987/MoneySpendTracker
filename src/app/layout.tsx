@@ -62,7 +62,7 @@ export default function RootLayout({
         className={`${manrope.variable} ${inter.variable} antialiased`}
         style={{ fontFamily: "var(--font-manrope, sans-serif)" }}
       >
-        {children}
+        <main className="mainContainer">{children}</main>
       </body>
     </html>
   );

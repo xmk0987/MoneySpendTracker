@@ -52,7 +52,7 @@ export async function handlePostCsv(
       fileObj.newFilename ||
       "unknown";
 
-    const { transactions, summary, transactionsDataId } = await processCsvFile(
+    const { transactionsDataId } = await processCsvFile(
       filePath,
       mapping,
       fileName
@@ -60,7 +60,7 @@ export async function handlePostCsv(
 
     res.status(200).json({
       message: "CSV processed successfully!",
-      data: { transactions, summary, transactionsDataId, fileName },
+      data: { transactionsDataId },
     });
   } catch (err: unknown) {
     console.error("Error processing form data:", err);

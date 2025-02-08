@@ -5,7 +5,7 @@ import fs from "fs";
 import * as Papa from "papaparse";
 import Transaction from "@/models/Transaction";
 import Transactions from "@/models/Transactions";
-import type { CSVMapping, TransactionsData } from "@/models/types";
+import type { CSVMapping } from "@/models/types";
 import { createTransactionsData } from "../utils/csvUtils";
 import client from "@/lib/redisDb";
 
@@ -18,7 +18,7 @@ export async function processCsvFile(
   filePath: string,
   mapping: CSVMapping,
   fileName: string
-): Promise<TransactionsData> {
+): Promise<{ transactionsDataId: string }> {
   return new Promise((resolve, reject) => {
     fs.readFile(filePath, "utf8", (readErr, data) => {
       if (readErr) {
@@ -68,7 +68,7 @@ export async function processCsvFile(
 
           await client.expire(transactionsDataId, 7200);
 
-          resolve({ transactions, summary, transactionsDataId, fileName });
+          resolve({ transactionsDataId });
         },
         error: (error: Error) => {
           reject(error);
