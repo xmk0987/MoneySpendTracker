@@ -132,7 +132,7 @@ const CsvUploadMapper: React.FC<CsvUploadMapperProps> = ({ setId }) => {
         const data = await response.json();
         setId(data.data.transactionsDataId);
         localStorage.setItem("transactionsId", data.data.transactionsDataId);
-        router.push(`/dashboard?id=${data.data.transactionsDataId}`);
+        router.push(`/${data.data.transactionsDataId}/dashboard`);
       } else {
         alert(
           "Error processing CSV file. Make sure the csv file is a bank statements csv that contains equivalent fields to the required."

@@ -13,7 +13,7 @@ export default function Home() {
     const savedId = localStorage.getItem("transactionsId");
     if (savedId) {
       setTransactionsDataId(savedId);
-      router.push(`/dashboard?id=${savedId}`);
+      router.push(`/${savedId}/dashboard`);
     }
   }, [router]);
 

@@ -55,8 +55,7 @@ export async function processCsvFile(
             timeline: transactionsCollection.getTimeline(),
           };
 
-          const randomId = crypto.randomUUID();
-          const transactionsDataId = `transactionsData-${randomId}`;
+          const transactionsDataId = crypto.randomUUID();
 
           await client.hSet(transactionsDataId, {
             transactions: JSON.stringify(transactions),
