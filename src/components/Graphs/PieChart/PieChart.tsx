@@ -16,7 +16,7 @@ const PieChart: React.FC<PieChartProps> = ({ data }) => {
   const [category, setCategory] = useState<"spend" | "earned">("spend");
 
   // Get data based on the selected category
-  const selectedData = data.summary.categories.payerNameOrTitle[category];
+  const selectedData = data.summary.categories.receiverNameOrTitle[category];
 
   // Process and sort top 10 transactions
   const sortedData = Object.entries(selectedData)

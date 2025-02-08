@@ -5,42 +5,47 @@ export const REQUIRED_CSV_FIELDS: (keyof CSVMapping)[] = [
   "date_created",
   "total",
   "sender",
-  "payerNameOrTitle",
+  "receiverNameOrTitle",
 ];
 
 export const CSV_FIELD_LABELS: Record<keyof CSVMapping, string> = {
   date_created: "Date Created",
   total: "Total",
-  sender: "Sender",
-  payerNameOrTitle: "Payer name or title",
+  sender: "Closest to sender name",
+  receiverNameOrTitle: "Closest to receiver name",
 };
 
-export const HEADER_MAPPING: { [key: string]: keyof CSVMapping } = {
+export const HEADER_MAPPING: { [key: string]: (keyof CSVMapping)[] } = {
   // Finnish Headers
-  Kirjauspäivä: "date_created",
-  Summa: "total",
-  Maksaja: "sender",
-  Määrä: "total",
+  Kirjauspäivä: ["date_created"],
+  Summa: ["total"],
+  Maksaja: ["sender"],
+  Määrä: ["total"],
+  "Määrä EUROA": ["total"],
+  "Määrä EUR": ["total"],
+  Päivämäärä: ["date_created"],
 
-  "Saajan nimi": "payerNameOrTitle",
-  Otsikko: "payerNameOrTitle",
-  Maksunsaaja: "payerNameOrTitle",
+  "Saajan nimi": ["receiverNameOrTitle"],
+  Maksunsaaja: ["receiverNameOrTitle"],
+  Otsikko: ["receiverNameOrTitle"],
+  "Maksaja tai saaja": ["sender", "receiverNameOrTitle"], // Can be sender or receiver
+  "Saaja/Maksaja": ["sender", "receiverNameOrTitle"],
 
   // English Headers
-  "Date Created": "date_created",
-  "Creation Date": "date_created",
-  "Entry Date": "date_created",
+  "Date Created": ["date_created"],
+  "Creation Date": ["date_created"],
+  "Entry Date": ["date_created"],
 
-  Total: "total",
-  Amount: "total",
-  Sum: "total",
+  Total: ["total"],
+  Amount: ["total"],
+  Sum: ["total"],
 
-  Sender: "sender",
-  Payer: "sender",
-  "Sender Name": "sender",
+  Sender: ["sender"],
+  Payer: ["sender"],
+  "Sender Name": ["sender"],
 
-  Title: "payerNameOrTitle",
-  Description: "payerNameOrTitle",
-  Payee: "payerNameOrTitle",
-  Recipient: "payerNameOrTitle",
+  Title: ["receiverNameOrTitle"],
+  Description: ["receiverNameOrTitle"],
+  Payee: ["receiverNameOrTitle"],
+  Recipient: ["receiverNameOrTitle"],
 };

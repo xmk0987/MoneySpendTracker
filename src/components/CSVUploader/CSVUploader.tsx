@@ -42,11 +42,8 @@ const CsvUploadMapper: React.FC<CsvUploadMapperProps> = ({
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       setCsvFile(file);
-
-      // Reset previous mappings and invalid fields
       setInvalidFields([]);
 
-      // Parse the CSV file to extract only the header row.
       Papa.parse(file, {
         header: true,
         preview: 1,
@@ -54,17 +51,21 @@ const CsvUploadMapper: React.FC<CsvUploadMapperProps> = ({
           const headers = results.meta.fields as string[];
           setCsvHeaders(headers);
 
-          // Auto-map if CSV headers match the required fields.
           const initialMapping: Partial<CSVMapping> = {};
-          REQUIRED_CSV_FIELDS.forEach((field) => {
-            const csvHeader = Object.keys(HEADER_MAPPING).find(
-              (header) =>
-                HEADER_MAPPING[header] === field && headers.includes(header)
-            );
 
-            if (csvHeader) {
-              initialMapping[field] = csvHeader;
-            }
+          REQUIRED_CSV_FIELDS.forEach(() => {
+            Object.keys(HEADER_MAPPING).forEach((header) => {
+              if (headers.includes(header)) {
+                const mappedFields = HEADER_MAPPING[header];
+
+                // If the header maps to multiple fields, assign all of them
+                mappedFields.forEach((mappedField) => {
+                  if (REQUIRED_CSV_FIELDS.includes(mappedField)) {
+                    initialMapping[mappedField] = header;
+                  }
+                });
+              }
+            });
           });
 
           setMapping(initialMapping);

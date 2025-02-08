@@ -49,8 +49,8 @@ export async function processCsvFile(
               dailyAggregates: transactionsCollection.getDailyBudgets(),
             },
             categories: {
-              payerNameOrTitle:
-                transactionsCollection.getPayerNameOrTitleCategory(),
+              receiverNameOrTitle:
+                transactionsCollection.getReceiverNameOrTitleCategory(),
             },
             timeline: transactionsCollection.getTimeline(),
           };

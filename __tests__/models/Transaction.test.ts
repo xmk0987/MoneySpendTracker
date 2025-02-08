@@ -16,7 +16,7 @@ describe("Transaction", () => {
         dateCreated: new Date("2025-01-21T22:00:00.000Z"),
         total: -9.15,
         sender: "ONNI VITIKAINEN",
-        payerNameOrTitle: "GROCERY STORE",
+        receiverNameOrTitle: "GROCERY STORE",
       };
 
       expect(transaction).toEqual(expectedTransaction);

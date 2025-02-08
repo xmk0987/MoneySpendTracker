@@ -86,11 +86,11 @@ export default class Transactions {
   }
 
   /**
-   * Groups transactions by payerNameOrTitle, normalizes names, and merges similar ones using the Dice Coefficient.
+   * Groups transactions by receiverNameOrTitle, normalizes names, and merges similar ones using the Dice Coefficient.
    * Separates the transactions into 'spend' and 'earned' categories.
    * @returns An object containing separate records for spend and earned transactions.
    */
-  getPayerNameOrTitleCategory(): {
+  getReceiverNameOrTitleCategory(): {
     spend: Record<string, number>;
     earned: Record<string, number>;
   } {
@@ -99,7 +99,7 @@ export default class Transactions {
 
     // Group transactions by name
     this.transactions.forEach((transaction) => {
-      const { sender, payerNameOrTitle, total } = transaction;
+      const { sender, receiverNameOrTitle, total } = transaction;
       const absoluteTotal = Math.abs(total);
 
       // Normalize sender by removing spaces
@@ -111,13 +111,15 @@ export default class Transactions {
       if (total < 0) {
         // Categorize as spending
         spendMap.set(
-          payerNameOrTitle,
-          (spendMap.get(payerNameOrTitle) ?? 0) + absoluteTotal
+          receiverNameOrTitle,
+          (spendMap.get(receiverNameOrTitle) ?? 0) + absoluteTotal
         );
       } else {
         // Categorize as earned
         const key =
-          isBankAccount || normalizedSender === "" ? payerNameOrTitle : sender;
+          isBankAccount || normalizedSender === ""
+            ? receiverNameOrTitle
+            : sender;
 
         earnedMap.set(key, (earnedMap.get(key) ?? 0) + absoluteTotal);
       }

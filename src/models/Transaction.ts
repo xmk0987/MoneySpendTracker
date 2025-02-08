@@ -5,20 +5,20 @@ export interface TransactionProps {
   date_created: string;
   total: string;
   sender: string;
-  payerNameOrTitle: string;
+  receiverNameOrTitle: string;
 }
 
 export default class Transaction {
   dateCreated: Date;
   total: number;
   sender: string;
-  payerNameOrTitle: string;
+  receiverNameOrTitle: string;
 
   constructor({
     date_created,
     total,
     sender,
-    payerNameOrTitle,
+    receiverNameOrTitle,
   }: TransactionProps) {
     // Parse and validate dates using the flexible parser.
     const parsedCreated = Transaction.parseDateFlexible(date_created);
@@ -37,7 +37,7 @@ export default class Transaction {
 
     this.total = parsedTotal;
     this.sender = sender;
-    this.payerNameOrTitle = payerNameOrTitle;
+    this.receiverNameOrTitle = receiverNameOrTitle;
   }
 
   // Factory method that attempts to create a Transaction.

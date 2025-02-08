@@ -4,7 +4,7 @@ export interface CSVMapping {
   date_created: string;
   total: string;
   sender: string;
-  payerNameOrTitle: string;
+  receiverNameOrTitle: string;
 }
 
 export interface TransactionsData {
@@ -25,7 +25,7 @@ export interface TransactionsData {
       dailyAggregates: Record<string, { spend: number; received: number }>;
     };
     categories: {
-      payerNameOrTitle: {
+      receiverNameOrTitle: {
         spend: Record<string, number>;
         earned: Record<string, number>;
       };
