@@ -2,12 +2,28 @@
   max-height: 90vh;
   width: 100%;
   overflow-y: scroll;
+  border-radius: var(--radius);
 }
 
 .table {
   width: 100%;
-  background-color: var(--main-background);
-  border-collapse: collapse;
+  border-collapse: separate;
+}
+
+.table tr:first-child th:first-child {
+  border-top-left-radius: 0.5rem;
+}
+
+.table tr:first-child th:last-child {
+  border-top-right-radius: 0.5rem;
+}
+
+.table tr:last-child td:first-child {
+  border-bottom-left-radius: 0.5rem;
+}
+
+.table tr:last-child td:last-child {
+  border-bottom-right-radius: 0.5rem;
 }
 
 .table thead th {
@@ -18,7 +34,6 @@
   text-align: start;
   padding: 10px;
   cursor: pointer;
-  z-index: 6; /* high enough to be on top */
 }
 
 .headerItem {
@@ -35,5 +50,7 @@
 }
 
 .table tbody tr td {
+  background-color: var(--main-background);
+
   padding: 10px;
 }
