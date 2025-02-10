@@ -1,0 +1,18 @@
+.filter {
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.date {
+  display: flex;
+  flex-direction: column;
+}
+
+.date label {
+  font-size: 0.7rem;
+}
+
+.date input {
+  border-radius: 3px;
+}

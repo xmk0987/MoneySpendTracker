@@ -1,10 +1,13 @@
 import React, { useState, useMemo } from "react";
 import { TransactionsData } from "@/models/types";
 import Transaction from "@/models/Transaction";
-import { formatDate } from "@/utils/dates";
+import { formatDate, formatDateToDatePicker } from "@/utils/dates";
 import styles from "./Transactions.module.css";
 import ArrowDown from "@/assets/icons/ArrowDown";
 import ArrowUp from "@/assets/icons/ArrowUp";
+import NumberFilter from "../Filters/NumberFilter/NumberFilter";
+import DateFilter from "../Filters/DateFilter/DateFilter";
+import TextFilter from "../Filters/TextFilter/TextFilter";
 
 interface TransactionsProps {
   data: TransactionsData;
@@ -14,9 +17,22 @@ type SortField = "total" | "sender" | "receiverNameOrTitle" | "dateCreated";
 
 const Transactions: React.FC<TransactionsProps> = ({ data }) => {
   const transactions = data.transactions;
-
   const [sortField, setSortField] = useState<SortField>("dateCreated");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
+
+  // Filtering states:
+  // For sender/receiver fields.
+  const [filterText, setFilterText] = useState<string>("");
+  // For numeric (total) filtering.
+  const [filterMin, setFilterMin] = useState<number | "">("");
+  const [filterMax, setFilterMax] = useState<number | "">("");
+  // For date filtering.
+  const [filterStartDate, setFilterStartDate] = useState<string>(
+    formatDateToDatePicker(data.summary.timeline.startDate)
+  );
+  const [filterEndDate, setFilterEndDate] = useState<string>(
+    formatDateToDatePicker(data.summary.timeline.endDate)
+  );
 
   /**
    * Handles clicking on a table header.
@@ -27,7 +43,6 @@ const Transactions: React.FC<TransactionsProps> = ({ data }) => {
    */
   const handleSort = (field: SortField) => {
     if (sortField === field) {
-      // Toggle sort direction if the same header is clicked.
       setSortDirection((prev) => (prev === "asc" ? "desc" : "asc"));
     } else {
       setSortField(field);
@@ -59,64 +74,122 @@ const Transactions: React.FC<TransactionsProps> = ({ data }) => {
     });
   }, [transactions, sortField, sortDirection]);
 
+  /**
+   * Filters the sorted transactions based on multiple active filter criteria.
+   */
+  const filteredTransactions = useMemo(() => {
+    return sortedTransactions.filter((transaction) => {
+      if (filterText) {
+        const text = filterText.toLowerCase();
+        if (
+          !transaction.sender.toLowerCase().includes(text) &&
+          !transaction.receiverNameOrTitle.toLowerCase().includes(text)
+        ) {
+          return false;
+        }
+      }
+
+      if (filterMin !== "" && transaction.total < filterMin) return false;
+      if (filterMax !== "" && transaction.total > filterMax) return false;
+
+      const transactionDate = new Date(transaction.dateCreated)
+        .toISOString()
+        .split("T")[0];
+      if (filterStartDate && transactionDate <= filterStartDate) return false;
+      if (filterEndDate && transactionDate >= filterEndDate) return false;
+
+      return true;
+    });
+  }, [
+    sortedTransactions,
+    filterText,
+    filterMin,
+    filterMax,
+    filterStartDate,
+    filterEndDate,
+  ]);
+
   return (
-    <div className={styles.tableWrapper}>
-      <table className={styles.table}>
-        <thead>
-          <tr>
-            <th>
-              <button
-                className={styles.headerItem}
-                onClick={() => handleSort("total")}
-              >
-                Total
-                {sortField === "total" &&
-                  (sortDirection === "desc" ? <ArrowDown /> : <ArrowUp />)}
-              </button>
-            </th>
-            <th>
-              <button
-                className={styles.headerItem}
-                onClick={() => handleSort("sender")}
-              >
-                Sender
-                {sortField === "sender" &&
-                  (sortDirection === "desc" ? <ArrowDown /> : <ArrowUp />)}
-              </button>
-            </th>
-            <th>
-              <button
-                className={styles.headerItem}
-                onClick={() => handleSort("receiverNameOrTitle")}
-              >
-                Receiver / Title
-                {sortField === "receiverNameOrTitle" &&
-                  (sortDirection === "desc" ? <ArrowDown /> : <ArrowUp />)}
-              </button>
-            </th>
-            <th>
-              <button
-                className={styles.headerItem}
-                onClick={() => handleSort("dateCreated")}
-              >
-                Date
-                {sortField === "dateCreated" &&
-                  (sortDirection === "desc" ? <ArrowDown /> : <ArrowUp />)}
-              </button>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {sortedTransactions.map((transaction: Transaction, index) => (
-            <tr key={`transaction-${transaction.total}-${index}`}>
-              <td>{transaction.total}</td>
-              <td>{transaction.sender}</td>
-              <td>{transaction.receiverNameOrTitle}</td>
-              <td>{formatDate(transaction.dateCreated)}</td>
+    <div className={styles.content}>
+      <div className={styles.options}>
+        <p>Filtering</p>
+        <div className={styles.filters}>
+          <DateFilter
+            filterStartDate={filterStartDate}
+            filterEndDate={filterEndDate}
+            onFilterStartDateChange={setFilterStartDate}
+            onFilterEndDateChange={setFilterEndDate}
+          />
+          <NumberFilter
+            filterMin={filterMin}
+            filterMax={filterMax}
+            onFilterMinChange={setFilterMin}
+            onFilterMaxChange={setFilterMax}
+          />
+          <TextFilter
+            filterText={filterText}
+            onFilterTextChange={setFilterText}
+          />
+        </div>
+      </div>
+      <div className={styles.tableWrapper}>
+        <table className={styles.table}>
+          <thead>
+            <tr>
+              <th>
+                <button
+                  className={styles.headerItem}
+                  onClick={() => handleSort("total")}
+                >
+                  Total
+                  {sortField === "total" &&
+                    (sortDirection === "desc" ? <ArrowDown /> : <ArrowUp />)}
+                </button>
+              </th>
+              <th>
+                <button
+                  className={styles.headerItem}
+                  onClick={() => handleSort("sender")}
+                >
+                  Sender
+                  {sortField === "sender" &&
+                    (sortDirection === "desc" ? <ArrowDown /> : <ArrowUp />)}
+                </button>
+              </th>
+              <th>
+                <button
+                  className={styles.headerItem}
+                  onClick={() => handleSort("receiverNameOrTitle")}
+                >
+                  Receiver / Title
+                  {sortField === "receiverNameOrTitle" &&
+                    (sortDirection === "desc" ? <ArrowDown /> : <ArrowUp />)}
+                </button>
+              </th>
+              <th>
+                <button
+                  className={styles.headerItem}
+                  onClick={() => handleSort("dateCreated")}
+                >
+                  Date
+                  {sortField === "dateCreated" &&
+                    (sortDirection === "desc" ? <ArrowDown /> : <ArrowUp />)}
+                </button>
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {filteredTransactions.map((transaction: Transaction, index) => (
+              <tr key={`transaction-${transaction.total}-${index}`}>
+                <td>{transaction.total}</td>
+                <td>{transaction.sender}</td>
+                <td>{transaction.receiverNameOrTitle}</td>
+                <td>{formatDate(transaction.dateCreated)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

@@ -80,3 +80,7 @@ export function getISOWeek(date: Date): number {
     Math.round((firstThursday - tmpDate.valueOf()) / (7 * 24 * 60 * 60 * 1000));
   return weekNumber;
 }
+
+export function formatDateToDatePicker(date: string | null): string {
+  return date ? new Date(date).toISOString().split("T")[0] : "";
+}

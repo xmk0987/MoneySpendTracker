@@ -1,0 +1,12 @@
+.filter {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter label {
+  font-size: 0.7rem;
+}
+
+.filter input {
+  border-radius: 3px;
+}

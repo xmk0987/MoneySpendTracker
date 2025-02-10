@@ -1,0 +1,18 @@
+.filter {
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.number {
+  display: flex;
+  flex-direction: column;
+}
+
+.number label {
+  font-size: 0.7rem;
+}
+
+.number input {
+  border-radius: 3px;
+}

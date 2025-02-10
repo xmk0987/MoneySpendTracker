@@ -79,12 +79,24 @@ export default class Transactions {
     const minTimestamp = Math.min(...dates);
     const maxTimestamp = Math.max(...dates);
 
+    /**
+     * Converts a timestamp to a local date string in YYYY-MM-DD format.
+     *
+     * @param timestamp - The timestamp to convert.
+     * @returns A string formatted as YYYY-MM-DD.
+     */
+    const toLocalDateString = (timestamp: number): string => {
+      const date = new Date(timestamp);
+      const timezoneOffset = date.getTimezoneOffset() * 60000;
+      const localDate = new Date(date.getTime() - timezoneOffset);
+      return localDate.toISOString().split("T")[0];
+    };
+
     return {
-      startDate: new Date(minTimestamp).toISOString(),
-      endDate: new Date(maxTimestamp).toISOString(),
+      startDate: toLocalDateString(minTimestamp),
+      endDate: toLocalDateString(maxTimestamp),
     };
   }
-
   /**
    * Groups transactions by receiverNameOrTitle, normalizes names, and merges similar ones using the Dice Coefficient.
    * Separates the transactions into 'spend' and 'earned' categories.
