@@ -24,6 +24,8 @@ export default class Transaction {
     const parsedCreated = Transaction.parseDateFlexible(date_created);
 
     if (!parsedCreated) {
+      console.log("Parsed", parsedCreated, date_created);
+
       throw new Error(`Invalid date(s). date_created: ${date_created}`);
     }
 
@@ -77,6 +79,7 @@ export default class Transaction {
         return parsed;
       }
     }
+
     return null;
   }
 

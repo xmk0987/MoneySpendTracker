@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react";
 import { TransactionsData } from "@/models/types";
 import Transaction from "@/models/Transaction";
-import { formatDate, formatDateToDatePicker } from "@/utils/dates";
+import { formatDate, toLocalDateString } from "@/utils/dates";
 import styles from "./Transactions.module.css";
 import ArrowDown from "@/assets/icons/ArrowDown";
 import ArrowUp from "@/assets/icons/ArrowUp";
@@ -17,6 +17,7 @@ type SortField = "total" | "sender" | "receiverNameOrTitle" | "dateCreated";
 
 const Transactions: React.FC<TransactionsProps> = ({ data }) => {
   const transactions = data.transactions;
+
   const [sortField, setSortField] = useState<SortField>("dateCreated");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
 
@@ -28,10 +29,10 @@ const Transactions: React.FC<TransactionsProps> = ({ data }) => {
   const [filterMax, setFilterMax] = useState<number | "">("");
   // For date filtering.
   const [filterStartDate, setFilterStartDate] = useState<string>(
-    formatDateToDatePicker(data.summary.timeline.startDate)
+    toLocalDateString(data.summary.timeline.startDate)
   );
   const [filterEndDate, setFilterEndDate] = useState<string>(
-    formatDateToDatePicker(data.summary.timeline.endDate)
+    toLocalDateString(data.summary.timeline.endDate)
   );
 
   /**
@@ -92,11 +93,9 @@ const Transactions: React.FC<TransactionsProps> = ({ data }) => {
       if (filterMin !== "" && transaction.total < filterMin) return false;
       if (filterMax !== "" && transaction.total > filterMax) return false;
 
-      const transactionDate = new Date(transaction.dateCreated)
-        .toISOString()
-        .split("T")[0];
-      if (filterStartDate && transactionDate <= filterStartDate) return false;
-      if (filterEndDate && transactionDate >= filterEndDate) return false;
+      const transactionDate = toLocalDateString(transaction.dateCreated);
+      if (filterStartDate && transactionDate < filterStartDate) return false;
+      if (filterEndDate && transactionDate > filterEndDate) return false;
 
       return true;
     });
@@ -109,27 +108,37 @@ const Transactions: React.FC<TransactionsProps> = ({ data }) => {
     filterEndDate,
   ]);
 
+  const filteredTotal = filteredTransactions
+    .reduce((accumulator, transaction) => accumulator + transaction.total, 0)
+    .toFixed(2);
+
   return (
     <div className={styles.content}>
       <div className={styles.options}>
-        <p>Filtering</p>
-        <div className={styles.filters}>
-          <DateFilter
-            filterStartDate={filterStartDate}
-            filterEndDate={filterEndDate}
-            onFilterStartDateChange={setFilterStartDate}
-            onFilterEndDateChange={setFilterEndDate}
-          />
-          <NumberFilter
-            filterMin={filterMin}
-            filterMax={filterMax}
-            onFilterMinChange={setFilterMin}
-            onFilterMaxChange={setFilterMax}
-          />
-          <TextFilter
-            filterText={filterText}
-            onFilterTextChange={setFilterText}
-          />
+        <div className={styles.filtering}>
+          <p>Filtering</p>
+          <div className={styles.filters}>
+            <DateFilter
+              filterStartDate={filterStartDate}
+              filterEndDate={filterEndDate}
+              onFilterStartDateChange={setFilterStartDate}
+              onFilterEndDateChange={setFilterEndDate}
+            />
+            <NumberFilter
+              filterMin={filterMin}
+              filterMax={filterMax}
+              onFilterMinChange={setFilterMin}
+              onFilterMaxChange={setFilterMax}
+            />
+            <TextFilter
+              filterText={filterText}
+              onFilterTextChange={setFilterText}
+            />
+          </div>
+        </div>
+        <div className={styles["infoBox"]}>
+          <p className="text-2l">Total</p>
+          <p className="text-2l">{filteredTotal}</p>
         </div>
       </div>
       <div className={styles.tableWrapper}>

@@ -27,6 +27,7 @@ export async function processCsvFile(
 
       Papa.parse<Record<string, any>>(data, {
         header: true,
+        skipEmptyLines: true,
         complete: async (results) => {
           const parsedRows = results.data;
 

@@ -1,7 +1,7 @@
 // src/models/Transactions.ts
 import { calculateSimilarityDiceCoefficient } from "@/utils/stringSimilarity";
 import Transaction from "./Transaction";
-import { getISOWeek } from "@/utils/dates";
+import { getISOWeek, toLocalDateString } from "@/utils/dates";
 
 export default class Transactions {
   private transactions: Transaction[];
@@ -78,19 +78,6 @@ export default class Transactions {
     const dates = this.transactions.map((tx) => tx.dateCreated.getTime());
     const minTimestamp = Math.min(...dates);
     const maxTimestamp = Math.max(...dates);
-
-    /**
-     * Converts a timestamp to a local date string in YYYY-MM-DD format.
-     *
-     * @param timestamp - The timestamp to convert.
-     * @returns A string formatted as YYYY-MM-DD.
-     */
-    const toLocalDateString = (timestamp: number): string => {
-      const date = new Date(timestamp);
-      const timezoneOffset = date.getTimezoneOffset() * 60000;
-      const localDate = new Date(date.getTime() - timezoneOffset);
-      return localDate.toISOString().split("T")[0];
-    };
 
     return {
       startDate: toLocalDateString(minTimestamp),

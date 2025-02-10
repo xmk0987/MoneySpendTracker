@@ -81,6 +81,10 @@ export function getISOWeek(date: Date): number {
   return weekNumber;
 }
 
-export function formatDateToDatePicker(date: string | null): string {
-  return date ? new Date(date).toISOString().split("T")[0] : "";
+export function toLocalDateString(date: string | Date | number | null): string {
+  if (!date) return "";
+  const d = new Date(date);
+  const timezoneOffset = d.getTimezoneOffset() * 60000;
+  const localDate = new Date(d.getTime() - timezoneOffset);
+  return localDate.toISOString().split("T")[0];
 }
