@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Manrope, Inter } from "next/font/google";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 
 // Import Google Fonts
@@ -63,6 +64,7 @@ export default function RootLayout({
         style={{ fontFamily: "var(--font-manrope, sans-serif)" }}
       >
         {children}
+        <SpeedInsights />
       </body>
     </html>
   );
