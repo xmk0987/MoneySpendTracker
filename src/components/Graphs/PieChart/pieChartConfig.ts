@@ -37,6 +37,7 @@ export const getPieChartOptions = (
     legend: {
       position: "bottom" as const,
     },
+
     title: {
       display: false,
       text: `Transaction Distribution (${capitalizeFirstLetter(currentType)})`,

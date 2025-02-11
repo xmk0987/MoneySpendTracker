@@ -1,12 +1,11 @@
 .content {
+  flex: 1 1 auto;
   padding: var(--gutter);
-  padding-top: 70px;
-
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: calc(100vh - 100px);
+  overflow: scroll;
 }
 
 .innerContainer {
