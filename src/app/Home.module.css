@@ -1,0 +1,14 @@
+.container {
+  background-color: var(--component-background);
+  padding: calc(var(--gutter));
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: 0.8px 1.8px 12px -4px white;
+  overflow: auto;
+  margin: auto;
+  align-items: center;
+  min-width: 250px;
+  max-width: 500px;
+}

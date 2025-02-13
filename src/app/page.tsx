@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import CsvUploadMapper from "../components/CSVUploader/CSVUploader";
 import { useRouter } from "next/navigation";
 import Loader from "@/components/Loader/Loader";
+import styles from "./Home.module.css";
 
 export default function Home() {
   const router = useRouter();
@@ -18,7 +19,9 @@ export default function Home() {
   }, [router]);
 
   return transactionsDataId === "" ? (
-    <CsvUploadMapper setId={setTransactionsDataId} />
+    <main className={styles.container}>
+      <CsvUploadMapper setId={setTransactionsDataId} />
+    </main>
   ) : (
     <Loader />
   );
