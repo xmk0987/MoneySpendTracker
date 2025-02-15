@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import handlePostSpankkiAuth from "@/services/api/spankki/auth/requests/handlePostSpankkiAuth";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { handleGetToken } from "@/services/api/spankki/token/handleGetToken";
 
 export const config = {
   api: {
@@ -13,7 +13,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === "POST") {
-    await handleGetToken(req, res);
+    await handlePostSpankkiAuth(req, res);
   } else {
     res.status(405).json({ message: "Method not allowed" });
   }
