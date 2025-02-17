@@ -3,7 +3,7 @@ import { TransactionProps } from "@/models/Transaction";
 import { CSVMapping } from "@/models/types";
 
 // Create the transactions data based on mapping and validate it for null values
-export const createTransactionsData = (
+export const mapCsvHeadersToTransactions = (
   parsedRows: Record<string, any>[],
   mapping: CSVMapping
 ) => {

@@ -73,7 +73,6 @@ export const TransactionsDataProvider: React.FC<{
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
-  // While the data is not yet fetched, display the Loader
   if (!transactionsData) return <Loader />;
 
   return (

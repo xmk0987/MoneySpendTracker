@@ -5,8 +5,8 @@ import fs from "fs";
 import * as Papa from "papaparse";
 import Transaction from "@/models/Transaction";
 import type { CSVMapping } from "@/models/types";
-import { createTransactionsData } from "../../../utils/csvUtils";
-import { processTransactionsData } from "../transactions/transactionsService";
+import { mapCsvHeadersToTransactions } from "../../../utils/csvUtils";
+import { createTransactionsData } from "../transactions/transactionsService";
 
 /**
  * Process a CSV file given its file path and a mapping.
@@ -31,13 +31,16 @@ export async function processCsvFile(
           const parsedRows = results.data;
 
           // Remap the CSV rows to our internal TransactionProps
-          const transactionsData = createTransactionsData(parsedRows, mapping);
+          const transactionsData = mapCsvHeadersToTransactions(
+            parsedRows,
+            mapping
+          );
 
           const transactions = transactionsData
             .map((props) => Transaction.tryCreate(props))
             .filter((tx): tx is Transaction => tx !== null);
 
-          const transactionsDataId = await processTransactionsData(
+          const transactionsDataId = await createTransactionsData(
             transactions,
             fileName
           );

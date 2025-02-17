@@ -4,7 +4,6 @@ import { logErrors } from "@/errors/logErrors";
 /**
  * Fetches CSV data for a given ID.
  *
- * @param id - The identifier used to fetch transactions data.
  * @returns A promise resolving to the string.
  * @throws An error if the request fails.
  */

@@ -2,7 +2,7 @@ import Transaction from "@/models/Transaction";
 import Transactions from "@/models/Transactions";
 import client from "@/lib/redisDb";
 
-export const processTransactionsData = async (
+export const createTransactionsData = async (
   transactions: Transaction[],
   fileName: string
 ) => {

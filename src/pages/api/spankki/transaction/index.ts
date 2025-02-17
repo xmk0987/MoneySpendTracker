@@ -20,6 +20,7 @@ export default async function handler(
       return res.status(200).json({ message: "No accounts found" });
     }
 
+    console.log("Accounts", accounts[0].Account);
     const transactionsArrayNested = await Promise.all(
       accounts.map(async (account: any) => {
         try {
