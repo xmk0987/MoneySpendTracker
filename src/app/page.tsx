@@ -29,8 +29,7 @@ export default function Home() {
       if (code) {
         axios
           .post("/api/spankki/auth/token", { code })
-          .then((response) => {
-            console.log("Token exchange response:", response.data);
+          .then(() => {
             router.push("/spankki/dashboard");
           })
           .catch((error) => {
