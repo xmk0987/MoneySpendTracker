@@ -24,8 +24,6 @@ export default class Transaction {
     const parsedCreated = Transaction.parseDateFlexible(date_created);
 
     if (!parsedCreated) {
-      console.log("Parsed", parsedCreated, date_created);
-
       throw new Error(`Invalid date(s). date_created: ${date_created}`);
     }
 
@@ -58,6 +56,15 @@ export default class Transaction {
    * @returns A valid Date object or null if none of the formats match.
    */
   static parseDateFlexible(dateStr: string): Date | null {
+    if (!dateStr) {
+      return null;
+    }
+
+    const isoParsed = new Date(dateStr);
+    if (isValid(isoParsed)) {
+      return isoParsed;
+    }
+
     const formats = [
       "dd-MM-yyyy", // e.g. "22-01-2025"
       "dd.MM.yyyy", // e.g. "22.01.2025"
@@ -68,10 +75,6 @@ export default class Transaction {
       "dd MMM yyyy", // e.g. "22 Jan 2025"
       "yyyy/MM/dd", // e.g. "2025/01/05"
     ];
-
-    if (!dateStr) {
-      return null;
-    }
 
     for (const format of formats) {
       const parsed = parse(dateStr, format, new Date());

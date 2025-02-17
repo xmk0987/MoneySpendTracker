@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import formidable from "formidable";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { processCsvFile } from "@/services/csvProcessor";
+import { processCsvFile } from "@/server/services/csv/csvService";
 import type { CSVMapping } from "@/models/types";
 
 // Disable body parser for file uploads
@@ -58,7 +58,7 @@ export async function handlePostCsv(
       fileName
     );
 
-    res.status(200).json({
+    res.status(201).json({
       message: "CSV processed successfully!",
       data: { transactionsDataId },
     });

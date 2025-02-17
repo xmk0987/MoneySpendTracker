@@ -1,10 +1,11 @@
 // contexts/TransactionsDataContext.tsx
 "use client";
-
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Loader from "@/components/Loader/Loader";
 import { TransactionsData } from "@/models/types";
+import { getCsvData, removeCsvData } from "@/services/api/csvService";
+import { getSpankkiTransactions } from "@/services/api/spankkiService";
 
 interface TransactionsDataContextValue {
   transactionsData: TransactionsData;
@@ -33,14 +34,6 @@ export const TransactionsDataProvider: React.FC<{
   const [transactionsData, setTransactionsData] =
     useState<TransactionsData | null>(null);
 
-  // Fetch the data when the id changes
-  useEffect(() => {
-    if (id) {
-      fetchTransactionsData(id);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
-
   const resetData = () => {
     localStorage.removeItem("transactionsId");
     setTransactionsData(null);
@@ -49,14 +42,8 @@ export const TransactionsDataProvider: React.FC<{
 
   const fetchTransactionsData = async (id: string) => {
     try {
-      const response = await fetch(`/api/csv?id=${encodeURIComponent(id)}`, {
-        method: "GET",
-      });
-      if (!response.ok) {
-        throw new Error("Failed to fetch transactions data");
-      }
-      const data = await response.json();
-      setTransactionsData(data.data);
+      const data = await getCsvData(id);
+      setTransactionsData(data);
     } catch (error) {
       console.error("Error fetching transactions data:", error);
       resetData();
@@ -66,17 +53,25 @@ export const TransactionsDataProvider: React.FC<{
   const removeFile = async () => {
     if (!id) return;
     try {
-      const response = await fetch(`/api/csv?id=${encodeURIComponent(id)}`, {
-        method: "DELETE",
-      });
-      if (!response.ok) {
-        throw new Error("Failed to delete CSV data");
-      }
+      await removeCsvData(id);
       resetData();
     } catch (error) {
-      console.error("Error removing CSV data", error);
+      console.error("Error removing CSV data:", error);
     }
   };
+
+  // Fetch the data when the id changes
+  useEffect(() => {
+    if (id && id !== "spankki") {
+      fetchTransactionsData(id);
+    } else if (id && id === "spankki") {
+      (async () => {
+        const newId = await getSpankkiTransactions();
+        router.push(`/${newId}/dashboard`);
+      })();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   // While the data is not yet fetched, display the Loader
   if (!transactionsData) return <Loader />;
