@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { TransactionsData } from "@/models/types";
+import { TransactionsData } from "@/types/types";
 import Transaction from "@/models/Transaction";
 import { formatDate, toLocalDateString } from "@/utils/dates";
 import styles from "./Transactions.module.css";

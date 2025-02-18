@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, ChangeEvent, useRef, useEffect } from "react";
 import Papa from "papaparse";
-import { CSVMapping } from "@/models/types";
+import { CSVMapping } from "@/types/types";
 import {
   CSV_FIELD_LABELS,
   REQUIRED_CSV_FIELDS,
@@ -12,21 +12,23 @@ import PrimaryButton from "../PrimaryButton/PrimaryButton";
 import demo from "@/assets/images/demo.png";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import Loader from "../Loader/Loader";
+import { postCsvData } from "@/services/api/csvService";
+import { useDashboardData } from "@/context/DashboardDataProvider";
 
 interface CsvUploadMapperProps {
-  setId: (id: string) => void;
+  setLoading: (value: boolean) => void;
 }
 
-const CsvUploadMapper: React.FC<CsvUploadMapperProps> = ({ setId }) => {
+const CsvUploadMapper: React.FC<CsvUploadMapperProps> = ({ setLoading }) => {
   const router = useRouter();
+  const { setTransactionsData } = useDashboardData();
+
   // State to store the uploaded CSV file.
   const [csvFile, setCsvFile] = useState<File | null>(null);
   // State to hold the extracted CSV header names.
   const [csvHeaders, setCsvHeaders] = useState<string[]>([]);
   // State to hold the mapping from each required field to a CSV header.
   const [mapping, setMapping] = useState<Partial<CSVMapping>>({});
-  const [loading, setLoading] = useState<boolean>(false);
 
   const [invalidFields, setInvalidFields] = useState<string[]>([]);
 
@@ -123,24 +125,15 @@ const CsvUploadMapper: React.FC<CsvUploadMapperProps> = ({ setId }) => {
     formData.append("mapping", JSON.stringify(mapping));
 
     try {
-      const response = await fetch("/api/csv", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setId(data.data.transactionsDataId);
-        localStorage.setItem("transactionsId", data.data.transactionsDataId);
-        router.push(`/${data.data.transactionsDataId}/dashboard`);
-      } else {
-        alert(
-          "Error processing CSV file. Make sure the csv file is a bank statements csv that contains equivalent fields to the required."
-        );
-      }
+      const dashboardData = await postCsvData(formData);
+      localStorage.setItem("transactionsId", dashboardData.id);
+      setTransactionsData(dashboardData);
+      router.push(`/${dashboardData.id}/dashboard`);
     } catch (error) {
       console.error("Error submitting CSV file:", error);
-      alert("An error occurred while processing the file.");
+      alert(
+        "Error processing CSV file. Make sure the csv file is a bank statements csv that contains equivalent fields to the required."
+      );
     } finally {
       setLoading(false);
     }
@@ -149,8 +142,6 @@ const CsvUploadMapper: React.FC<CsvUploadMapperProps> = ({ setId }) => {
   const isFormValid = REQUIRED_CSV_FIELDS.every(
     (field) => mapping[field as keyof CSVMapping]
   );
-
-  if (loading) return <Loader />;
 
   return (
     <>

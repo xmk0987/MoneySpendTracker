@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { NextApiRequest, NextApiResponse } from "next";
 import { handlePostCsv } from "@/server/controllers/csv/handlePostCsv";
-import { TransactionsData } from "@/models/types";
+import { TransactionsData } from "@/types/types";
 import { handleGetCsv } from "@/server/controllers/csv/handleGetCsv";
 import { handleRemoveCsv } from "@/server/controllers/csv/handleRemoveCsv";
 

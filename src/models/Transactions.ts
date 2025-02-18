@@ -84,11 +84,7 @@ export default class Transactions {
       endDate: toLocalDateString(maxTimestamp),
     };
   }
-  /**
-   * Groups transactions by receiverNameOrTitle, normalizes names, and merges similar ones using the Dice Coefficient.
-   * Separates the transactions into 'spend' and 'earned' categories.
-   * @returns An object containing separate records for spend and earned transactions.
-   */
+
   getReceiverNameOrTitleCategory(): {
     spend: Record<string, number>;
     earned: Record<string, number>;

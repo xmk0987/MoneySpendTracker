@@ -3,9 +3,9 @@
 import fs from "fs";
 import * as Papa from "papaparse";
 import Transaction from "@/models/Transaction";
-import type { CSVMapping } from "@/models/types";
+import type { CSVMapping, TransactionsData } from "@/types/types";
 import { mapCsvHeadersToTransactions } from "../../../utils/csvUtils";
-import { createTransactionsData } from "../transactions/transactionsService";
+import { createDashboardData } from "../transactions/transactionsService";
 
 /**
  * Process a CSV file given its file path and a mapping.
@@ -16,7 +16,7 @@ export async function processCsvFile(
   filePath: string,
   mapping: CSVMapping,
   fileName: string
-): Promise<{ transactionsDataId: string }> {
+): Promise<TransactionsData> {
   return new Promise((resolve, reject) => {
     fs.readFile(filePath, "utf8", (readErr, data) => {
       if (readErr) {
@@ -39,12 +39,12 @@ export async function processCsvFile(
             .map((props) => Transaction.tryCreate(props))
             .filter((tx): tx is Transaction => tx !== null);
 
-          const transactionsDataId = await createTransactionsData(
+          const dashboardData = await createDashboardData(
             transactions,
             fileName
           );
 
-          resolve({ transactionsDataId });
+          resolve(dashboardData);
         },
         error: (error: Error) => {
           reject(error);

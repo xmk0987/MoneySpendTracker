@@ -2,7 +2,7 @@
 
 import React, { useMemo, useState } from "react";
 import styles from "../Graph.module.css";
-import { TransactionsData } from "@/models/types";
+import { TransactionsData } from "@/types/types";
 import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,

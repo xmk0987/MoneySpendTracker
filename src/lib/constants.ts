@@ -1,5 +1,5 @@
 // In ../lib/constants.ts
-import { CSVMapping } from "@/models/types";
+import { CSVMapping } from "@/types/types";
 
 export const REQUIRED_CSV_FIELDS: (keyof CSVMapping)[] = [
   "date_created",

@@ -1,5 +1,5 @@
 "use client";
-import { TransactionsData } from "@/models/types";
+import { TransactionsData } from "@/types/types";
 import React from "react";
 import styles from "./Dashboard.module.css";
 import InfoBox from "@/components/InfoBox/InfoBox";

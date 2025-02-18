@@ -1,4 +1,4 @@
-import Transaction from "./Transaction";
+import Transaction from "../models/Transaction";
 
 export interface CSVMapping {
   date_created: string;
@@ -8,7 +8,7 @@ export interface CSVMapping {
 }
 
 export interface TransactionsData {
-  transactionsDataId: string;
+  id: string;
   fileName: string;
   transactions: Transaction[];
   summary: {

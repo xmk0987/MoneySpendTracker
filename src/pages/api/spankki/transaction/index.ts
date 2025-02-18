@@ -2,6 +2,11 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { logErrors } from "@/errors/logErrors";
 import { createSpankkiApi } from "@/server/axiosConfig/spankki/spankkiAxiosInstance";
 import { mapTransactionsToFitModel } from "@/server/services/spankki/transactionService";
+import {
+  SpankkiAccount,
+  SpankkiAccountApiResponse,
+  SpankkiTransactionApiResponse,
+} from "@/types/spankki/spankki.types";
 
 export default async function handler(
   req: NextApiRequest,
@@ -13,19 +18,22 @@ export default async function handler(
 
   try {
     const spankkiApi = await createSpankkiApi(req, res);
-    const accountResponse = await spankkiApi.get("accounts");
-    const accounts = accountResponse.data.Data.Account;
+    const accountResponse = await spankkiApi.get<SpankkiAccountApiResponse>(
+      "accounts"
+    );
+    const accounts: SpankkiAccount[] = accountResponse.data.Data.Account;
 
     if (!accounts || accounts.length === 0) {
       return res.status(200).json({ message: "No accounts found" });
     }
 
     const transactionsArrayNested = await Promise.all(
-      accounts.map(async (account: any) => {
+      accounts.map(async (account: SpankkiAccount) => {
         try {
-          const transactionResponse = await spankkiApi.get(
-            `accounts/${account.AccountId}/transactions`
-          );
+          const transactionResponse =
+            await spankkiApi.get<SpankkiTransactionApiResponse>(
+              `accounts/${account.AccountId}/transactions`
+            );
           return transactionResponse.data.Data.Transaction;
         } catch (err) {
           console.error(
@@ -40,13 +48,11 @@ export default async function handler(
 
     const transactionsArray = transactionsArrayNested.flat();
 
-    const transactionsDataId = await mapTransactionsToFitModel(
-      transactionsArray
-    );
+    const dashboardData = await mapTransactionsToFitModel(transactionsArray);
 
     return res.status(201).json({
       message: "Spankki transactions processed successfully",
-      data: { transactionsDataId },
+      data: dashboardData,
     });
   } catch (error) {
     logErrors(error);

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Chart, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
-import { TransactionsData } from "@/models/types";
+import { TransactionsData } from "@/types/types";
 import styles from "../Graph.module.css";
 import { getPieChartData, getPieChartOptions } from "./pieChartConfig";
 import { capitalizeFirstLetter } from "@/utils/stringSimilarity";

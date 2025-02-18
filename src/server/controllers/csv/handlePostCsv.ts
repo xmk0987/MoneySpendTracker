@@ -2,7 +2,7 @@
 import formidable from "formidable";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { processCsvFile } from "@/server/services/csv/csvService";
-import type { CSVMapping } from "@/models/types";
+import type { CSVMapping } from "@/types/types";
 
 // Disable body parser for file uploads
 export const config = {
@@ -52,15 +52,11 @@ export async function handlePostCsv(
       fileObj.newFilename ||
       "unknown";
 
-    const { transactionsDataId } = await processCsvFile(
-      filePath,
-      mapping,
-      fileName
-    );
+    const dashboardData = await processCsvFile(filePath, mapping, fileName);
 
     res.status(201).json({
       message: "CSV processed successfully!",
-      data: { transactionsDataId },
+      data: dashboardData,
     });
   } catch (err: unknown) {
     console.error("Error processing form data:", err);

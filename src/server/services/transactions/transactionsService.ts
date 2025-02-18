@@ -1,11 +1,12 @@
 import Transaction from "@/models/Transaction";
 import Transactions from "@/models/Transactions";
 import client from "@/lib/redisDb";
+import { TransactionsData } from "@/types/types";
 
-export const createTransactionsData = async (
+export const createDashboardData = async (
   transactions: Transaction[],
   fileName: string
-) => {
+): Promise<TransactionsData> => {
   const transactionsCollection = new Transactions(transactions);
 
   const summary = {
@@ -26,13 +27,21 @@ export const createTransactionsData = async (
 
   const transactionsDataId = crypto.randomUUID();
 
+  const dashboardData: TransactionsData = {
+    id: transactionsDataId,
+    fileName,
+    transactions,
+    summary,
+  };
+
   await client.hSet(transactionsDataId, {
     transactions: JSON.stringify(transactions),
     summary: JSON.stringify(summary),
-    fileName: fileName,
+    fileName,
+    id: transactionsDataId,
   });
 
   await client.expire(transactionsDataId, 7200);
 
-  return transactionsDataId;
+  return dashboardData;
 };

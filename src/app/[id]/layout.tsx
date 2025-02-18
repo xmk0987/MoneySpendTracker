@@ -3,8 +3,8 @@
 
 import React from "react";
 import styles from "./layout.module.css";
-import { TransactionsDataProvider } from "@/context/TransactionsDataContext";
 import Header from "@/components/Header/Header";
+import { DashboardLogicProvider } from "@/context/DashboardLogicProvider";
 
 interface IdLayoutProps {
   children: React.ReactNode;
@@ -15,12 +15,12 @@ interface IdLayoutProps {
  */
 const IdLayout: React.FC<IdLayoutProps> = ({ children }) => {
   return (
-    <TransactionsDataProvider>
+    <DashboardLogicProvider>
       <Header />
       <main className={styles.content}>
         <div className={styles.innerContainer}>{children}</div>
       </main>
-    </TransactionsDataProvider>
+    </DashboardLogicProvider>
   );
 };
 
