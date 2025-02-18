@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./Home.module.css";
 import PrimaryButton from "@/components/PrimaryButton/PrimaryButton";
-import CsvUploadMapper from "@/components/CSVUploader/CSVUploader";
 
 export default function Home() {
   const router = useRouter();
