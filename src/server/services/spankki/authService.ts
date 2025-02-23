@@ -1,6 +1,7 @@
+"use server"
 // authService.ts
 import axios from "axios";
-import spankkiHttpAgent from "@/lib/httpAgents/spankkiHttpAgent";
+import spankkiHttpAgent from "@/lib/spankki/spankkiHttpAgent";
 
 const SPANKKI_TOKEN_ENDPOINT =
   "https://s-pankki-api-sandbox.crosskey.io/open-banking/v2.0/oidc/token";
@@ -159,22 +160,4 @@ export async function createAccountAccessConsent(
  */
 export function generateIntentId(consentId: string): string {
   return `urn:s-pankki:account:${consentId}`;
-}
-
-/**
- * Generates a random alphanumeric string to be used as the state parameter.
- *
- * @param length - The desired length of the random state string (default is 16).
- * @returns A random string.
- */
-export function generateRandomState(length = 16): string {
-  const possibleChars =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  let state = "";
-  for (let i = 0; i < length; i++) {
-    state += possibleChars.charAt(
-      Math.floor(Math.random() * possibleChars.length)
-    );
-  }
-  return state;
 }

@@ -4,7 +4,9 @@ export const logErrors = (error: unknown) => {
   if (axios.isAxiosError(error)) {
     console.error(
       "Axios error details:",
-      error.response?.data || error.message
+      error.response?.data?.error.failures ||
+        error.response?.data ||
+        error.message
     );
   } else if (error instanceof Error) {
     console.error("Error details:", error.message);

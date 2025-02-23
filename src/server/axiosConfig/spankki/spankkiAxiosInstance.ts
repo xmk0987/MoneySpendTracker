@@ -1,7 +1,8 @@
+"use server"
 import axios, { AxiosInstance } from "axios";
 import { parse, serialize } from "cookie";
 import type { NextApiRequest, NextApiResponse } from "next";
-import spankkiHttpAgent from "@/lib/httpAgents/spankkiHttpAgent";
+import spankkiHttpAgent from "@/lib/spankki/spankkiHttpAgent";
 
 const SPANKKI_API_BASE_URL =
   "https://s-pankki-api-sandbox.crosskey.io/open-banking/v3.1.6/aisp/";

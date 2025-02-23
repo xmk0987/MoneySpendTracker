@@ -1,3 +1,4 @@
+"use server"
 import type { NextApiRequest, NextApiResponse } from "next";
 import { logErrors } from "@/errors/logErrors";
 import { getUserAccessToken } from "@/server/services/spankki/authService";

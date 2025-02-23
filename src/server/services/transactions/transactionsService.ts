@@ -1,3 +1,4 @@
+"use server";
 import Transaction from "@/models/Transaction";
 import Transactions from "@/models/Transactions";
 import client from "@/lib/redisDb";

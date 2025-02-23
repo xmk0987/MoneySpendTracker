@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./Home.module.css";
 import PrimaryButton from "@/components/PrimaryButton/PrimaryButton";
+import axios from "axios";
 
 export default function Home() {
   const router = useRouter();
@@ -19,8 +20,16 @@ export default function Home() {
     router.push(`/csv`);
   };
 
-  const handleBankAuthorization = () => {
+  const handleSpankkiAuthorization = () => {
     window.location.href = "/api/spankki/auth";
+  };
+
+  const handleNordeaAuthorization = async () => {
+    // ! Only available in production with nordea need to simulate being
+    // ! authorized
+    /* window.location.href = "/api/nordea/auth"; */
+    const result = await axios.post("/api/nordea/transaction");
+    console.log("Result received", result);
   };
 
   return (
@@ -30,7 +39,11 @@ export default function Home() {
         text="Upload from computer"
         onClick={handleUploadFromComputer}
       />
-      <PrimaryButton text="SPankki login" onClick={handleBankAuthorization} />
+      <PrimaryButton
+        text="SPankki login"
+        onClick={handleSpankkiAuthorization}
+      />
+      <PrimaryButton text="Nordea login" onClick={handleNordeaAuthorization} />
     </main>
   );
 }
