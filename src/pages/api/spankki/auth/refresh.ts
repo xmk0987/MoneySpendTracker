@@ -1,8 +1,8 @@
-"use server"
+"use server";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { logErrors } from "@/errors/logErrors";
 import { serialize } from "cookie";
-import { refreshAccessToken } from "@/server/services/spankki/authService";
+import { refreshAccessToken } from "@/server/spankki/services/authService";
 
 export default async function handler(
   req: NextApiRequest,

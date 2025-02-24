@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-"use server"
+"use server";
 import type { NextApiRequest, NextApiResponse } from "next";
 import {
   getClientToken,
   createAccountAccessConsent,
   generateIntentId,
-} from "@/server/services/spankki/authService";
-import { generateRandomState } from "@/server/utils/helpers";
+} from "@/server/spankki/services/authService";
+import { generateRandomState } from "@/utils/helpers";
 import { logErrors } from "@/errors/logErrors";
 import jwt from "jsonwebtoken";
 import fs from "fs";

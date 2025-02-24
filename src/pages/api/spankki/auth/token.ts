@@ -1,7 +1,7 @@
-"use server"
+"use server";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { logErrors } from "@/errors/logErrors";
-import { getUserAccessToken } from "@/server/services/spankki/authService";
+import { getUserAccessToken } from "@/server/spankki/services/authService";
 import { serialize } from "cookie";
 
 // This route handles the fetching of token data for a verified user.

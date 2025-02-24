@@ -1,6 +1,6 @@
 "use server";
 import axios, { AxiosInstance } from "axios";
-import { createSignature } from "@/server/services/nordea/signature";
+import { createSignature } from "@/server/nordea/utils/signature";
 
 export async function createNordeaApi(
   endpoint: string
@@ -17,6 +17,8 @@ export async function createNordeaApi(
   if (!nordeaBaseUri || !clientId || !clientSecret || !mockAccessToken) {
     throw new Error("Missing configuration");
   }
+
+  console.log("Endpoint for api ", endpoint);
 
   const originatingDate = new Date().toUTCString();
 

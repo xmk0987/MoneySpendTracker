@@ -1,6 +1,6 @@
 "use server";
 import axios from "axios";
-import { generateRandomState } from "@/server/utils/helpers";
+import { generateRandomState } from "@/utils/helpers";
 import { createSignature } from "./signature";
 
 export async function getNordeaAuthorizationResponse() {

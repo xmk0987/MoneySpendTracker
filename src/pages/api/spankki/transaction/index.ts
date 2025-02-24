@@ -1,12 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { logErrors } from "@/errors/logErrors";
-import { createSpankkiApi } from "@/server/axiosConfig/spankki/spankkiAxiosInstance";
-import { mapTransactionsToFitModel } from "@/server/services/spankki/transactionService";
+import { createSpankkiApi } from "@/server/spankki/config/spankkiAxiosInstance";
+import { mapTransactionsToFitModel } from "@/server/spankki/services/transactionService";
 import {
   SpankkiAccount,
   SpankkiAccountApiResponse,
   SpankkiTransactionApiResponse,
-} from "@/types/spankki/spankki.types";
+} from "@/types/spankki.types";
 
 export default async function handler(
   req: NextApiRequest,

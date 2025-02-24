@@ -5,7 +5,7 @@ import * as Papa from "papaparse";
 import Transaction from "@/models/Transaction";
 import type { CSVMapping, TransactionsData } from "@/types/types";
 import { mapCsvHeadersToTransactions } from "../../../utils/csvUtils";
-import { createDashboardData } from "../transactions/transactionsService";
+import { createDashboardData } from "../../dashboard/dashboardData";
 
 /**
  * Process a CSV file given its file path and a mapping.

@@ -1,6 +1,6 @@
 import Transaction from "@/models/Transaction";
-import { createDashboardData } from "../transactions/transactionsService";
-import { SpankkiTransaction } from "@/types/spankki/spankki.types";
+import { createDashboardData } from "../../dashboard/dashboardData";
+import { SpankkiTransaction } from "@/types/spankki.types";
 import { TransactionsData } from "@/types/types";
 
 export const mapTransactionsToFitModel = async (

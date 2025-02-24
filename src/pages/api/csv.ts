@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { NextApiRequest, NextApiResponse } from "next";
-import { handlePostCsv } from "@/server/controllers/csv/handlePostCsv";
+import { handlePostCsv } from "@/server/csv/controllers/handlePostCsv";
 import { TransactionsData } from "@/types/types";
-import { handleGetCsv } from "@/server/controllers/csv/handleGetCsv";
-import { handleRemoveCsv } from "@/server/controllers/csv/handleRemoveCsv";
+import { handleGetCsv } from "@/server/csv/controllers/handleGetCsv";
+import { handleRemoveCsv } from "@/server/csv/controllers/handleRemoveCsv";
 
 export const config = {
   api: {

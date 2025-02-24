@@ -2,7 +2,7 @@
 "use server";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { logErrors } from "@/errors/logErrors";
-import { getNordeaAuthorizationResponse } from "@/server/services/nordea/authService";
+import { getNordeaAuthorizationResponse } from "@/server/nordea/authService";
 
 /**
  * !Currently the nordea auth flow is only allowed in production

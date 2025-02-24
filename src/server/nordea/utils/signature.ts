@@ -1,6 +1,6 @@
 "use server";
 import QsealcSignature from "@/lib/nordea/qsealcSignature";
-import { computeDigest } from "@/server/utils/helpers";
+import { computeDigest } from "@/utils/helpers";
 
 export const createSignature = (
   endpoint: string,
