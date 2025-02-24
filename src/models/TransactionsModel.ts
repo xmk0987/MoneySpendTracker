@@ -1,21 +1,18 @@
-// src/models/Transactions.ts
 import { calculateSimilarityDiceCoefficient } from "@/utils/stringSimilarity";
-import Transaction from "./Transaction";
+import TransactionModel from "./TransactionModel";
 import { getISOWeek, toLocalDateString } from "@/utils/dates";
 
-export default class Transactions {
-  private transactions: Transaction[];
+export default class TransactionsModel {
+  private transactions: TransactionModel[];
 
-  constructor(transactions: Transaction[]) {
+  constructor(transactions: TransactionModel[]) {
     this.transactions = transactions;
   }
 
-  // Count the number of transactions.
   countTotal(): number {
     return this.transactions.length;
   }
 
-  // Sum of all spending transactions (negative values).
   getTotalSpend(): number {
     const total = this.transactions.reduce((acc, tx) => {
       const amount = tx.total;
@@ -24,7 +21,6 @@ export default class Transactions {
     return Number(total.toFixed(2));
   }
 
-  // Sum of all received (positive) transactions.
   getTotalReceived(): number {
     const total = this.transactions.reduce((acc, tx) => {
       const amount = tx.total;
@@ -33,12 +29,10 @@ export default class Transactions {
     return Number(total.toFixed(2));
   }
 
-  // Yearly Aggregation based on dateCreated
   getYearlyBudgets(): Record<string, { spend: number; received: number }> {
     return this.aggregateBudgets((tx) => `${tx.dateCreated.getFullYear()}`);
   }
 
-  // Monthly Aggregation based on dateCreated
   getMonthlyBudgets(): Record<string, { spend: number; received: number }> {
     return this.aggregateBudgets(
       (tx) =>
@@ -48,7 +42,6 @@ export default class Transactions {
     );
   }
 
-  // Weekly Aggregation based on dateCreated
   getWeeklyBudgets(): Record<string, { spend: number; received: number }> {
     return this.aggregateBudgets((tx) => {
       const year = tx.dateCreated.getFullYear();
@@ -57,7 +50,6 @@ export default class Transactions {
     });
   }
 
-  // Daily Aggregation based on dateCreated
   getDailyBudgets(): Record<string, { spend: number; received: number }> {
     return this.aggregateBudgets(
       (tx) =>
@@ -97,20 +89,16 @@ export default class Transactions {
       const { sender, receiverNameOrTitle, total } = transaction;
       const absoluteTotal = Math.abs(total);
 
-      // Normalize sender by removing spaces
       const normalizedSender = sender.replace(/\s+/g, "");
 
-      // Check if sender is a bank account number (IBAN-like)
       const isBankAccount = /^[A-Z]{2}\d{10,30}$/.test(normalizedSender);
 
       if (total < 0) {
-        // Categorize as spending
         spendMap.set(
           receiverNameOrTitle,
           (spendMap.get(receiverNameOrTitle) ?? 0) + absoluteTotal
         );
       } else {
-        // Categorize as earned
         const key =
           isBankAccount || normalizedSender === ""
             ? receiverNameOrTitle
@@ -167,7 +155,7 @@ export default class Transactions {
   }
 
   private aggregateBudgets(
-    keyGenerator: (tx: Transaction) => string
+    keyGenerator: (tx: TransactionModel) => string
   ): Record<string, { spend: number; received: number }> {
     const budgets = this.transactions.reduce((acc, tx) => {
       const key = keyGenerator(tx);
@@ -183,7 +171,6 @@ export default class Transactions {
       return acc;
     }, {} as Record<string, { spend: number; received: number }>);
 
-    // Round each aggregated value to two decimals.
     for (const key in budgets) {
       budgets[key].spend = Number(budgets[key].spend.toFixed(2));
       budgets[key].received = Number(budgets[key].received.toFixed(2));

@@ -1,14 +1,14 @@
 "use server";
-import Transaction from "@/models/Transaction";
-import Transactions from "@/models/Transactions";
+import TransactionModel from "@/models/TransactionModel";
+import TransactionsModel from "@/models/TransactionsModel";
 import client from "@/lib/redisDb";
 import { TransactionsData } from "@/types/types";
 
 export const createDashboardData = async (
-  transactions: Transaction[],
+  transactions: TransactionModel[],
   fileName: string
 ): Promise<TransactionsData> => {
-  const transactionsCollection = new Transactions(transactions);
+  const transactionsCollection = new TransactionsModel(transactions);
 
   const summary = {
     totalCount: transactionsCollection.countTotal(),

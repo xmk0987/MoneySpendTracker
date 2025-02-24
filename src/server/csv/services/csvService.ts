@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import fs from "fs";
 import * as Papa from "papaparse";
-import Transaction from "@/models/Transaction";
+import TransactionModel from "@/models/TransactionModel";
 import type { CSVMapping, TransactionsData } from "@/types/types";
 import { mapCsvHeadersToTransactions } from "../../../utils/csvUtils";
 import { createDashboardData } from "../../dashboard/dashboardData";
@@ -36,8 +36,8 @@ export async function processCsvFile(
           );
 
           const transactions = transactionsData
-            .map((props) => Transaction.tryCreate(props))
-            .filter((tx): tx is Transaction => tx !== null);
+            .map((props) => TransactionModel.tryCreate(props))
+            .filter((tx): tx is TransactionModel => tx !== null);
 
           const dashboardData = await createDashboardData(
             transactions,

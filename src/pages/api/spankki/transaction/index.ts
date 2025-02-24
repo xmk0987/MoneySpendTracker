@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { logErrors } from "@/errors/logErrors";
 import { createSpankkiApi } from "@/server/spankki/config/spankkiAxiosInstance";
-import { mapTransactionsToFitModel } from "@/server/spankki/services/transactionService";
+import { mapSpankkiTransactionsToModel } from "@/server/spankki/services/transactionService";
 import {
   SpankkiAccount,
   SpankkiAccountApiResponse,
@@ -48,7 +48,9 @@ export default async function handler(
 
     const transactionsArray = transactionsArrayNested.flat();
 
-    const dashboardData = await mapTransactionsToFitModel(transactionsArray);
+    const dashboardData = await mapSpankkiTransactionsToModel(
+      transactionsArray
+    );
 
     return res.status(201).json({
       message: "Spankki transactions processed successfully",

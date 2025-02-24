@@ -1,4 +1,4 @@
-import Transaction from "../models/Transaction";
+import TransactionModel from "../models/TransactionModel";
 
 export interface CSVMapping {
   date_created: string;
@@ -10,7 +10,7 @@ export interface CSVMapping {
 export interface TransactionsData {
   id: string;
   fileName: string;
-  transactions: Transaction[];
+  transactions: TransactionModel[];
   summary: {
     timeline: {
       startDate: string | null;

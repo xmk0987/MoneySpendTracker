@@ -3,6 +3,7 @@ import { logErrors } from "@/errors/logErrors";
 import {
   getNordeaAccounts,
   getNordeaTransactions,
+  mapNordeaTransactionsToModel,
 } from "@/server/nordea/services/transactionsService";
 
 export default async function handler(
@@ -21,7 +22,14 @@ export default async function handler(
 
     const nordeaTransactions = await getNordeaTransactions(accounts);
 
-    return res.status(200).json({ nordeaTransactions });
+    const dashboardData = await mapNordeaTransactionsToModel(
+      nordeaTransactions
+    );
+
+    return res.status(201).json({
+      message: "Nordea transactions processed successfully",
+      data: dashboardData,
+    });
   } catch (error) {
     logErrors(error);
     return res.status(500).json({ message: "Internal server error" });

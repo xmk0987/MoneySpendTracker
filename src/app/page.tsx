@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./Home.module.css";
 import PrimaryButton from "@/components/PrimaryButton/PrimaryButton";
-import axios from "axios";
 
 export default function Home() {
   const router = useRouter();
@@ -28,8 +27,7 @@ export default function Home() {
     // ! Only available in production with nordea need to simulate being
     // ! authorized
     /* window.location.href = "/api/nordea/auth"; */
-    const result = await axios.post("/api/nordea/transaction");
-    console.log("Result received", result);
+    router.push("/nordea/callback");
   };
 
   return (

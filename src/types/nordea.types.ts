@@ -19,14 +19,14 @@ export interface GroupHeader {
  * Contains the main response with account details and related links.
  */
 export interface AccountsResponse {
-  accounts: Account[];
+  accounts: NordeaAccount[];
   _links: Link[];
 }
 
 /**
  * Represents an individual bank account.
  */
-export interface Account {
+export interface NordeaAccount {
   country: string;
   account_numbers: AccountNumber[];
   currency: string;
@@ -74,7 +74,7 @@ export interface Link {
  */
 export interface NordeaTransactionsApiResponse {
   group_header: GroupHeader;
-  response: TransactionsResponse;
+  response: NordeaTransactionsResponse;
 }
 
 /**
@@ -97,8 +97,8 @@ export interface MessagePagination {
 /**
  * Contains the main data payload of the transactions response.
  */
-export interface TransactionsResponse {
-  transactions: Transaction[];
+export interface NordeaTransactionsResponse {
+  transactions: NordeaTransaction[];
   account_number: AccountNumber;
   _links: Link[];
 }
@@ -106,7 +106,7 @@ export interface TransactionsResponse {
 /**
  * Represents an individual transaction.
  */
-export interface Transaction {
+export interface NordeaTransaction {
   transaction_id: string;
   currency: string;
   booking_date: string;
@@ -125,4 +125,8 @@ export interface Transaction {
   original_currency?: string;
   original_currency_amount?: string;
   currency_rate?: string;
+}
+
+export interface NordeaTransactionWithAccountName extends NordeaTransaction {
+  accountName: string;
 }

@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { TransactionsData } from "@/types/types";
-import Transaction from "@/models/Transaction";
+import TransactionModel from "@/models/TransactionModel";
 import { formatDate, toLocalDateString } from "@/utils/dates";
 import styles from "./Transactions.module.css";
 import ArrowDown from "@/assets/icons/ArrowDown";
@@ -188,14 +188,16 @@ const Transactions: React.FC<TransactionsProps> = ({ data }) => {
             </tr>
           </thead>
           <tbody>
-            {filteredTransactions.map((transaction: Transaction, index) => (
-              <tr key={`transaction-${transaction.total}-${index}`}>
-                <td>{transaction.total}</td>
-                <td>{transaction.sender}</td>
-                <td>{transaction.receiverNameOrTitle}</td>
-                <td>{formatDate(transaction.dateCreated)}</td>
-              </tr>
-            ))}
+            {filteredTransactions.map(
+              (transaction: TransactionModel, index) => (
+                <tr key={`transaction-${transaction.total}-${index}`}>
+                  <td>{transaction.total}</td>
+                  <td>{transaction.sender}</td>
+                  <td>{transaction.receiverNameOrTitle}</td>
+                  <td>{formatDate(transaction.dateCreated)}</td>
+                </tr>
+              )
+            )}
           </tbody>
         </table>
       </div>

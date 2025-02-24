@@ -1,12 +1,12 @@
-import Transaction from "@/models/Transaction";
+import TransactionModel from "@/models/TransactionModel";
 import { createDashboardData } from "../../dashboard/dashboardData";
 import { SpankkiTransaction } from "@/types/spankki.types";
 import { TransactionsData } from "@/types/types";
 
-export const mapTransactionsToFitModel = async (
+export const mapSpankkiTransactionsToModel = async (
   transactionsData: SpankkiTransaction[]
 ): Promise<TransactionsData> => {
-  const transactions: Transaction[] = transactionsData
+  const transactions: TransactionModel[] = transactionsData
     .map((transaction: SpankkiTransaction) => {
       const amountValue = transaction.Amount
         ? parseFloat(transaction.Amount.Amount)
@@ -26,7 +26,7 @@ export const mapTransactionsToFitModel = async (
         total = Math.abs(amountValue);
       }
 
-      return Transaction.tryCreate({
+      return TransactionModel.tryCreate({
         date_created: transaction.BookingDateTime,
         total: String(total),
         sender: transaction.DebtorAccount?.Name || "Unknown Sender",
@@ -34,7 +34,9 @@ export const mapTransactionsToFitModel = async (
           transaction.CreditorAccount?.Name || "Unknown Receiver",
       });
     })
-    .filter((transaction): transaction is Transaction => transaction !== null);
+    .filter(
+      (transaction): transaction is TransactionModel => transaction !== null
+    );
 
   const dashboardData = await createDashboardData(transactions, "spankki");
 

@@ -1,6 +1,5 @@
 // app/spankki/callback/page.tsx
 "use client";
-
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
@@ -19,9 +18,7 @@ export default function SpankkiCallbackPage() {
 
         if (code) {
           try {
-            // Exchange the code for a token.
             await axios.post("/api/spankki/auth/token", { code });
-            // Fetch the new transactions data ID and setup spankki transactions.
             const dashboardData = await getSpankkiTransactions();
             router.push(`/${dashboardData.id}/dashboard`);
           } catch (error) {
