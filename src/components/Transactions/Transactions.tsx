@@ -8,7 +8,6 @@ import ArrowUp from "@/assets/icons/ArrowUp";
 import NumberFilter from "../Filters/NumberFilter/NumberFilter";
 import DateFilter from "../Filters/DateFilter/DateFilter";
 import TextFilter from "../Filters/TextFilter/TextFilter";
-import PrimaryButton from "../PrimaryButton/PrimaryButton";
 
 interface TransactionsProps {
   data: DashboardData;
