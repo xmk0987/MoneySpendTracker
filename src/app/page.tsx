@@ -30,6 +30,10 @@ export default function Home() {
     router.push("/nordea/callback");
   };
 
+  const handleOpAuthorization = async () => {
+    console.log("OP LOGIN");
+  };
+
   return (
     <main className={styles.container}>
       <h1 className="text-xl text-center">Money Spend Tracker</h1>
@@ -42,6 +46,7 @@ export default function Home() {
         onClick={handleSpankkiAuthorization}
       />
       <PrimaryButton text="Nordea login" onClick={handleNordeaAuthorization} />
+      <PrimaryButton text="OP login" onClick={handleOpAuthorization} />
     </main>
   );
 }

@@ -10,11 +10,8 @@ import { TransactionsData } from "@/types/types";
  */
 export async function getNordeaTransactions(): Promise<TransactionsData> {
   try {
-    console.log("Go fetch data");
-
     const response = await axios.post(`/api/nordea/transaction`);
 
-    console.log("Data received", response.data);
     return response.data.data;
   } catch (error) {
     logErrors(error);
