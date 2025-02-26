@@ -12,13 +12,16 @@ import PrimaryButton from "../PrimaryButton/PrimaryButton";
 import demo from "@/assets/images/demo.png";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import Loader from "../Loader/Loader";
 
 interface CsvUploadMapperProps {
   setId: (id: string) => void;
+  setLoading: (value: boolean) => void;
 }
 
-const CsvUploadMapper: React.FC<CsvUploadMapperProps> = ({ setId }) => {
+const CsvUploadMapper: React.FC<CsvUploadMapperProps> = ({
+  setId,
+  setLoading,
+}) => {
   const router = useRouter();
   // State to store the uploaded CSV file.
   const [csvFile, setCsvFile] = useState<File | null>(null);
@@ -26,8 +29,6 @@ const CsvUploadMapper: React.FC<CsvUploadMapperProps> = ({ setId }) => {
   const [csvHeaders, setCsvHeaders] = useState<string[]>([]);
   // State to hold the mapping from each required field to a CSV header.
   const [mapping, setMapping] = useState<Partial<CSVMapping>>({});
-  const [loading, setLoading] = useState<boolean>(false);
-
   const [invalidFields, setInvalidFields] = useState<string[]>([]);
 
   const fileInputRef = useRef<HTMLInputElement>(null); // Reference for the file input
@@ -149,8 +150,6 @@ const CsvUploadMapper: React.FC<CsvUploadMapperProps> = ({ setId }) => {
   const isFormValid = REQUIRED_CSV_FIELDS.every(
     (field) => mapping[field as keyof CSVMapping]
   );
-
-  if (loading) return <Loader />;
 
   return (
     <>

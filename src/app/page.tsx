@@ -8,6 +8,7 @@ import styles from "./Home.module.css";
 export default function Home() {
   const router = useRouter();
   const [transactionsDataId, setTransactionsDataId] = useState("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   // Initialize the ID from local storage if present
   useEffect(() => {
@@ -18,11 +19,11 @@ export default function Home() {
     }
   }, [router]);
 
-  return transactionsDataId === "" ? (
+  if (loading || transactionsDataId !== "") return <Loader />;
+
+  return (
     <main className={styles.container}>
-      <CsvUploadMapper setId={setTransactionsDataId} />
+      <CsvUploadMapper setId={setTransactionsDataId} setLoading={setLoading} />
     </main>
-  ) : (
-    <Loader />
   );
 }
