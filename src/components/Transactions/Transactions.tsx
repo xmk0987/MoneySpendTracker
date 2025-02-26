@@ -8,6 +8,7 @@ import ArrowUp from "@/assets/icons/ArrowUp";
 import NumberFilter from "../Filters/NumberFilter/NumberFilter";
 import DateFilter from "../Filters/DateFilter/DateFilter";
 import TextFilter from "../Filters/TextFilter/TextFilter";
+import PrimaryButton from "../PrimaryButton/PrimaryButton";
 
 interface TransactionsProps {
   data: DashboardData;
@@ -109,6 +110,14 @@ const Transactions: React.FC<TransactionsProps> = ({ data }) => {
     .reduce((accumulator, transaction) => accumulator + transaction.total, 0)
     .toFixed(2);
 
+  const handleResetFilters = () => {
+    setFilterMax("");
+    setFilterMin("");
+    setFilterText("");
+    setFilterStartDate(toLocalDateString(data.summary.timeline.startDate));
+    setFilterEndDate(toLocalDateString(data.summary.timeline.endDate));
+  };
+
   return (
     <div className={styles.content}>
       <div className={styles.options}>
@@ -132,6 +141,7 @@ const Transactions: React.FC<TransactionsProps> = ({ data }) => {
               onFilterTextChange={setFilterText}
             />
           </div>
+          <button onClick={handleResetFilters}>Reset Filters</button>
         </div>
         <div className={styles["infoBox"]}>
           <p className="text-2l">Total</p>

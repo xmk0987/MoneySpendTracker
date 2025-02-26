@@ -25,6 +25,15 @@
   gap: 25px;
 }
 
+.filtering button {
+  font-size: 0.7rem;
+  margin-left: 5px;
+}
+
+.filtering button:hover {
+  color: var(--accent2);
+}
+
 .options p {
   font-weight: bold;
 }
