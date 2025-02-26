@@ -2,7 +2,7 @@
 
 import React, { useMemo, useState } from "react";
 import styles from "../Graph.module.css";
-import { TransactionsData } from "@/models/types";
+import { DashboardData } from "@/types/types";
 import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -25,7 +25,7 @@ ChartJS.register(
 );
 
 interface BarGraphProps {
-  data: TransactionsData;
+  data: DashboardData;
 }
 
 const BarGraph: React.FC<BarGraphProps> = ({ data }) => {

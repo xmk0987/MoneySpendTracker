@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { NextApiRequest, NextApiResponse } from "next";
-import { handlePostCsv } from "@/services/api/csv/handlePostCsv";
-import { TransactionsData } from "@/models/types";
-import { handleGetCsv } from "@/services/api/csv/handleGetCsv";
-import { handleRemoveCsv } from "@/services/api/csv/handleRemoveCsv";
+import { handlePostCsv } from "@/server/csv/controllers/handlePostCsv";
+import { DashboardData } from "@/types/types";
+import { handleGetCsv } from "@/server/csv/controllers/handleGetCsv";
+import { handleRemoveCsv } from "@/server/csv/controllers/handleRemoveCsv";
 
 export const config = {
   api: {
@@ -13,7 +13,7 @@ export const config = {
 
 type ResponseData = {
   message: string;
-  data?: TransactionsData;
+  data?: DashboardData;
 };
 
 export default async function handler(

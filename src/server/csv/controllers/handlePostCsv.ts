@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+"use server";
 import formidable from "formidable";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { processCsvFile } from "@/services/csvProcessor";
-import type { CSVMapping } from "@/models/types";
+import { processCsvFile } from "../services/csvService";
+import type { RequiredHeaders } from "@/types/types";
 
 // Disable body parser for file uploads
 export const config = {
@@ -31,7 +32,7 @@ export async function handlePostCsv(
   try {
     const { fields, files } = await parseForm();
 
-    const mapping: CSVMapping = JSON.parse(fields.mapping as string);
+    const mapping: RequiredHeaders = JSON.parse(fields.mapping as string);
 
     const uploadedFile = files.file;
     if (!uploadedFile) {
@@ -45,22 +46,17 @@ export async function handlePostCsv(
 
     const filePath = fileObj.filepath || fileObj.path;
 
-    // Extracting the original file name
     const fileName =
       fileObj.originalFilename ||
       fileObj.name ||
       fileObj.newFilename ||
       "unknown";
 
-    const { transactionsDataId } = await processCsvFile(
-      filePath,
-      mapping,
-      fileName
-    );
+    const dashboardData = await processCsvFile(filePath, mapping, fileName);
 
-    res.status(200).json({
+    res.status(201).json({
       message: "CSV processed successfully!",
-      data: { transactionsDataId },
+      data: dashboardData,
     });
   } catch (err: unknown) {
     console.error("Error processing form data:", err);

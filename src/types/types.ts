@@ -1,16 +1,16 @@
-import Transaction from "./Transaction";
+import TransactionModel from "../models/TransactionModel";
 
-export interface CSVMapping {
+export interface RequiredHeaders {
   date_created: string;
   total: string;
   sender: string;
   receiverNameOrTitle: string;
 }
 
-export interface TransactionsData {
-  transactionsDataId: string;
+export interface DashboardData {
+  id: string;
   fileName: string;
-  transactions: Transaction[];
+  transactions: TransactionModel[];
   summary: {
     timeline: {
       startDate: string | null;

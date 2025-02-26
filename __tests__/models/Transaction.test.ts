@@ -1,4 +1,4 @@
-import Transaction from "@/models/Transaction";
+import TransactionModel from "@/models/TransactionModel";
 import {
   invalidDateCreated,
   invalidTotal,
@@ -9,7 +9,7 @@ import { describe, expect, test } from "@jest/globals";
 describe("Transaction", () => {
   describe("tryCreate", () => {
     test("it handles valid Transaction", () => {
-      const transaction = Transaction.tryCreate(validTransaction);
+      const transaction = TransactionModel.tryCreate(validTransaction);
       expect(transaction).not.toBeNull();
 
       const expectedTransaction = {
@@ -23,12 +23,12 @@ describe("Transaction", () => {
     });
 
     test("it handles invalid date created", () => {
-      const transaction = Transaction.tryCreate(invalidDateCreated);
+      const transaction = TransactionModel.tryCreate(invalidDateCreated);
       expect(transaction).toBeNull();
     });
 
     test("it handles invalid total", () => {
-      const transaction = Transaction.tryCreate(invalidTotal);
+      const transaction = TransactionModel.tryCreate(invalidTotal);
       expect(transaction).toBeNull();
     });
   });

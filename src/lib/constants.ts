@@ -1,21 +1,21 @@
 // In ../lib/constants.ts
-import { CSVMapping } from "@/models/types";
+import { RequiredHeaders } from "@/types/types";
 
-export const REQUIRED_CSV_FIELDS: (keyof CSVMapping)[] = [
+export const REQUIRED_CSV_FIELDS: (keyof RequiredHeaders)[] = [
   "date_created",
   "total",
   "sender",
   "receiverNameOrTitle",
 ];
 
-export const CSV_FIELD_LABELS: Record<keyof CSVMapping, string> = {
+export const CSV_FIELD_LABELS: Record<keyof RequiredHeaders, string> = {
   date_created: "Date Created",
   total: "Total",
   sender: "Closest to sender name",
   receiverNameOrTitle: "Closest to receiver name",
 };
 
-export const HEADER_MAPPING: { [key: string]: (keyof CSVMapping)[] } = {
+export const HEADER_MAPPING: { [key: string]: (keyof RequiredHeaders)[] } = {
   // Finnish Headers
   Kirjauspäivä: ["date_created"],
   Summa: ["total"],

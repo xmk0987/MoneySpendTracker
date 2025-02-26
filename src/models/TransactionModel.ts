@@ -1,14 +1,14 @@
 // src/models/Transaction.ts
 import { parse, isValid } from "date-fns";
 
-export interface TransactionProps {
+export interface TransactionModelProps {
   date_created: string;
   total: string;
   sender: string;
   receiverNameOrTitle: string;
 }
 
-export default class Transaction {
+export default class TransactionModel {
   dateCreated: Date;
   total: number;
   sender: string;
@@ -19,9 +19,8 @@ export default class Transaction {
     total,
     sender,
     receiverNameOrTitle,
-  }: TransactionProps) {
-    // Parse and validate dates using the flexible parser.
-    const parsedCreated = Transaction.parseDateFlexible(date_created);
+  }: TransactionModelProps) {
+    const parsedCreated = TransactionModel.parseDateFlexible(date_created);
 
     if (!parsedCreated) {
       console.log("Parsed", parsedCreated, date_created);
@@ -31,7 +30,7 @@ export default class Transaction {
 
     this.dateCreated = parsedCreated;
 
-    const parsedTotal = Transaction.parseTotal(total);
+    const parsedTotal = TransactionModel.parseTotal(total);
 
     if (parsedTotal === null) {
       throw new Error(`Invalid total: ${total}`);
@@ -42,21 +41,15 @@ export default class Transaction {
     this.receiverNameOrTitle = receiverNameOrTitle;
   }
 
-  // Factory method that attempts to create a Transaction.
-  static tryCreate(props: TransactionProps): Transaction | null {
+  static tryCreate(props: TransactionModelProps): TransactionModel | null {
     try {
-      return new Transaction(props);
+      return new TransactionModel(props);
     } catch (e) {
       console.error("Transaction creation failed:", e);
       return null;
     }
   }
 
-  /**
-   * Tries multiple date formats until a valid Date object is produced.
-   * @param dateStr - The date string to parse.
-   * @returns A valid Date object or null if none of the formats match.
-   */
   static parseDateFlexible(dateStr: string): Date | null {
     const formats = [
       "dd-MM-yyyy", // e.g. "22-01-2025"
@@ -83,10 +76,6 @@ export default class Transaction {
     return null;
   }
 
-  /**
-   * Attempts to parse a total string with potential non-ASCII minus signs.
-   * Returns null if parsing fails.
-   */
   static parseTotal(total: string): number | null {
     if (!total) {
       return null;

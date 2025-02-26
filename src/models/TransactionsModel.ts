@@ -1,12 +1,12 @@
 // src/models/Transactions.ts
 import { calculateSimilarityDiceCoefficient } from "@/utils/stringSimilarity";
-import Transaction from "./Transaction";
+import TransactionModel from "./TransactionModel";
 import { getISOWeek, toLocalDateString } from "@/utils/dates";
 
-export default class Transactions {
-  private transactions: Transaction[];
+export default class TransactionsModel {
+  private transactions: TransactionModel[];
 
-  constructor(transactions: Transaction[]) {
+  constructor(transactions: TransactionModel[]) {
     this.transactions = transactions;
   }
 
@@ -171,7 +171,7 @@ export default class Transactions {
   }
 
   private aggregateBudgets(
-    keyGenerator: (tx: Transaction) => string
+    keyGenerator: (tx: TransactionModel) => string
   ): Record<string, { spend: number; received: number }> {
     const budgets = this.transactions.reduce((acc, tx) => {
       const key = keyGenerator(tx);

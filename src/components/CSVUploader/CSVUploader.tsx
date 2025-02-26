@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, ChangeEvent, useRef, useEffect } from "react";
 import Papa from "papaparse";
-import { CSVMapping } from "@/models/types";
+import { RequiredHeaders } from "@/types/types";
 import {
   CSV_FIELD_LABELS,
   REQUIRED_CSV_FIELDS,
@@ -12,26 +12,27 @@ import PrimaryButton from "../PrimaryButton/PrimaryButton";
 import demo from "@/assets/images/demo.png";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { postCsvData } from "@/services/csvService";
+import { useDashboardData } from "@/context/DashboardDataProvider";
 
-interface CsvUploadMapperProps {
-  setId: (id: string) => void;
+interface CsvUploadProps {
   setLoading: (value: boolean) => void;
 }
 
-const CsvUploadMapper: React.FC<CsvUploadMapperProps> = ({
-  setId,
-  setLoading,
-}) => {
+const CsvUpload: React.FC<CsvUploadProps> = ({ setLoading }) => {
   const router = useRouter();
+  const { setDashboardData } = useDashboardData();
+
   // State to store the uploaded CSV file.
   const [csvFile, setCsvFile] = useState<File | null>(null);
   // State to hold the extracted CSV header names.
   const [csvHeaders, setCsvHeaders] = useState<string[]>([]);
   // State to hold the mapping from each required field to a CSV header.
-  const [mapping, setMapping] = useState<Partial<CSVMapping>>({});
+  const [mapping, setMapping] = useState<Partial<RequiredHeaders>>({});
+
   const [invalidFields, setInvalidFields] = useState<string[]>([]);
 
-  const fileInputRef = useRef<HTMLInputElement>(null); // Reference for the file input
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   /**
    * Reads the selected CSV file, and uses Papa Parse to extract the header row.
@@ -49,7 +50,7 @@ const CsvUploadMapper: React.FC<CsvUploadMapperProps> = ({
           const headers = results.meta.fields as string[];
           setCsvHeaders(headers);
 
-          const initialMapping: Partial<CSVMapping> = {};
+          const initialMapping: Partial<RequiredHeaders> = {};
 
           REQUIRED_CSV_FIELDS.forEach(() => {
             Object.keys(HEADER_MAPPING).forEach((header) => {
@@ -87,7 +88,7 @@ const CsvUploadMapper: React.FC<CsvUploadMapperProps> = ({
    * @param value - The CSV header value selected.
    */
   const handleMappingChange = (
-    requiredField: keyof CSVMapping,
+    requiredField: keyof RequiredHeaders,
     value: string
   ) => {
     setMapping((prevMapping) => ({
@@ -101,7 +102,7 @@ const CsvUploadMapper: React.FC<CsvUploadMapperProps> = ({
    */
   useEffect(() => {
     const invalid = REQUIRED_CSV_FIELDS.filter(
-      (field) => !mapping[field as keyof CSVMapping]
+      (field) => !mapping[field as keyof RequiredHeaders]
     );
     setInvalidFields(invalid);
   }, [mapping]);
@@ -124,31 +125,22 @@ const CsvUploadMapper: React.FC<CsvUploadMapperProps> = ({
     formData.append("mapping", JSON.stringify(mapping));
 
     try {
-      const response = await fetch("/api/csv", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setId(data.data.transactionsDataId);
-        localStorage.setItem("transactionsId", data.data.transactionsDataId);
-        router.push(`/${data.data.transactionsDataId}/dashboard`);
-      } else {
-        alert(
-          "Error processing CSV file. Make sure the csv file is a bank statements csv that contains equivalent fields to the required."
-        );
-      }
+      const dashboardData = await postCsvData(formData);
+      localStorage.setItem("transactionsId", dashboardData.id);
+      setDashboardData(dashboardData);
+      router.push(`/${dashboardData.id}/dashboard`);
     } catch (error) {
       console.error("Error submitting CSV file:", error);
-      alert("An error occurred while processing the file.");
+      alert(
+        "Error processing CSV file. Make sure the csv file is a bank statements csv that contains equivalent fields to the required."
+      );
     } finally {
       setLoading(false);
     }
   };
 
   const isFormValid = REQUIRED_CSV_FIELDS.every(
-    (field) => mapping[field as keyof CSVMapping]
+    (field) => mapping[field as keyof RequiredHeaders]
   );
 
   return (
@@ -236,4 +228,4 @@ const CsvUploadMapper: React.FC<CsvUploadMapperProps> = ({
   );
 };
 
-export default CsvUploadMapper;
+export default CsvUpload;

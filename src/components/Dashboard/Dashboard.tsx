@@ -1,5 +1,5 @@
 "use client";
-import { TransactionsData } from "@/models/types";
+import { DashboardData } from "@/types/types";
 import React from "react";
 import styles from "./Dashboard.module.css";
 import InfoBox from "@/components/InfoBox/InfoBox";
@@ -8,7 +8,7 @@ import BarGraph from "@/components/Graphs/BarGraph/BarGraph";
 import PieChart from "@/components/Graphs/PieChart/PieChart";
 
 interface DashboardProps {
-  data: TransactionsData;
+  data: DashboardData;
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ data }) => {

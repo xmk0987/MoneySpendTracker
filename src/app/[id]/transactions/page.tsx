@@ -1,12 +1,14 @@
 // app/transactions/TransactionsPage.tsx
 "use client";
-
 import React from "react";
-import { useTransactionsData } from "@/context/TransactionsDataContext";
 import Transactions from "@/components/Transactions/Transactions";
+import { useDashboardData } from "@/context/DashboardDataProvider";
+import Loader from "@/components/Loader/Loader";
 
 export default function TransactionsPage() {
-  const { transactionsData } = useTransactionsData();
+  const { dashboardData } = useDashboardData();
 
-  return <Transactions data={transactionsData} />;
+  if (!dashboardData) return <Loader />;
+
+  return <Transactions data={dashboardData} />;
 }

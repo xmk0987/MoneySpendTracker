@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Manrope, Inter } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
+import { DashboardDataProvider } from "@/context/DashboardDataProvider";
 
 // Import Google Fonts
 const manrope = Manrope({
@@ -63,7 +64,7 @@ export default function RootLayout({
         className={`${manrope.variable} ${inter.variable} antialiased`}
         style={{ fontFamily: "var(--font-manrope, sans-serif)" }}
       >
-        {children}
+        <DashboardDataProvider>{children}</DashboardDataProvider>
         <SpeedInsights />
       </body>
     </html>

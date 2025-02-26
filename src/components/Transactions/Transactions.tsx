@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
-import { TransactionsData } from "@/models/types";
-import Transaction from "@/models/Transaction";
+import { DashboardData } from "@/types/types";
+import TransactionModel from "@/models/TransactionModel";
 import { formatDate, toLocalDateString } from "@/utils/dates";
 import styles from "./Transactions.module.css";
 import ArrowDown from "@/assets/icons/ArrowDown";
@@ -10,7 +10,7 @@ import DateFilter from "../Filters/DateFilter/DateFilter";
 import TextFilter from "../Filters/TextFilter/TextFilter";
 
 interface TransactionsProps {
-  data: TransactionsData;
+  data: DashboardData;
 }
 
 type SortField = "total" | "sender" | "receiverNameOrTitle" | "dateCreated";
@@ -22,12 +22,9 @@ const Transactions: React.FC<TransactionsProps> = ({ data }) => {
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
 
   // Filtering states:
-  // For sender/receiver fields.
   const [filterText, setFilterText] = useState<string>("");
-  // For numeric (total) filtering.
   const [filterMin, setFilterMin] = useState<number | "">("");
   const [filterMax, setFilterMax] = useState<number | "">("");
-  // For date filtering.
   const [filterStartDate, setFilterStartDate] = useState<string>(
     toLocalDateString(data.summary.timeline.startDate)
   );
@@ -188,14 +185,16 @@ const Transactions: React.FC<TransactionsProps> = ({ data }) => {
             </tr>
           </thead>
           <tbody>
-            {filteredTransactions.map((transaction: Transaction, index) => (
-              <tr key={`transaction-${transaction.total}-${index}`}>
-                <td>{transaction.total}</td>
-                <td>{transaction.sender}</td>
-                <td>{transaction.receiverNameOrTitle}</td>
-                <td>{formatDate(transaction.dateCreated)}</td>
-              </tr>
-            ))}
+            {filteredTransactions.map(
+              (transaction: TransactionModel, index) => (
+                <tr key={`transaction-${transaction.total}-${index}`}>
+                  <td>{transaction.total}</td>
+                  <td>{transaction.sender}</td>
+                  <td>{transaction.receiverNameOrTitle}</td>
+                  <td>{formatDate(transaction.dateCreated)}</td>
+                </tr>
+              )
+            )}
           </tbody>
         </table>
       </div>
