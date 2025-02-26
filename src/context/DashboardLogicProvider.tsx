@@ -45,8 +45,12 @@ export const DashboardLogicProvider: React.FC<DashboardLogicProviderProps> = ({
 
   const resetData = useCallback(() => {
     localStorage.removeItem("transactionsId");
-    setDashboardData(null);
-    router.push("/");
+
+    router.push("/", { scroll: false });
+
+    setTimeout(() => {
+      setDashboardData(null);
+    }, 100);
   }, [router, setDashboardData]);
 
   const fetchTransactionsData = useCallback(
