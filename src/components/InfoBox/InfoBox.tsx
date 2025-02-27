@@ -9,8 +9,8 @@ interface InfoBoxProps {
 const InfoBox: React.FC<InfoBoxProps> = ({ header, value }) => {
   return (
     <div className={styles["infoBox"]}>
-      <p className="text-2l">{header}</p>
-      <p className="text-xl">{value}</p>
+      <p>{header}</p>
+      <p>{value}</p>
     </div>
   );
 };

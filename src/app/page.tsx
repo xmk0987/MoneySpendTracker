@@ -21,8 +21,10 @@ export default function Home() {
   if (loading || dashboardData) return <Loader />;
 
   return (
-    <main className={styles.container}>
-      <CsvUpload setLoading={setLoading} />
-    </main>
+    <div className="mainContainer">
+      <main className={styles.container}>
+        <CsvUpload setLoading={setLoading} />
+      </main>
+    </div>
   );
 }

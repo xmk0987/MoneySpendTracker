@@ -30,14 +30,19 @@ export const getPieChartData = (
 
 // Function to generate Pie Chart options
 export const getPieChartOptions = (
-  currentType: string
+  currentType: string,
+  showLegend: boolean,
+  legendPosition: "bottom" | "right"
 ): ChartOptions<"pie"> => ({
   responsive: true,
   plugins: {
     legend: {
-      position: "bottom" as const,
+      display: showLegend,
+      position: legendPosition,
+      labels: {
+        padding: 20,
+      },
     },
-
     title: {
       display: false,
       text: `Transaction Distribution (${capitalizeFirstLetter(currentType)})`,

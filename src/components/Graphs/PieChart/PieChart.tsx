@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Chart, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
 import { DashboardData } from "@/types/types";
@@ -14,9 +14,33 @@ Chart.register(ArcElement, Tooltip, Legend);
 
 const PieChart: React.FC<PieChartProps> = ({ data }) => {
   const [category, setCategory] = useState<"spend" | "earned">("spend");
+  const [showLegend, setShowLegend] = useState<boolean>(true);
+  const [legendPosition, setLegendPosition] = useState<"bottom" | "right">(
+    "bottom"
+  );
+
+  const updateLegendPosition = () => {
+    const width = window.innerWidth;
+    if (width <= 1100 && width >= 600) {
+      setLegendPosition("right");
+    } else {
+      setLegendPosition("bottom");
+    }
+  };
+
+  // Set the legend position initially and add a resize listener
+  useEffect(() => {
+    updateLegendPosition();
+    window.addEventListener("resize", updateLegendPosition);
+    return () => window.removeEventListener("resize", updateLegendPosition);
+  }, []);
 
   // Get data based on the selected category
   const selectedData = data.summary.categories.receiverNameOrTitle[category];
+
+  const toggleLegend = () => {
+    setShowLegend(!showLegend);
+  };
 
   // Process and sort top 10 transactions
   const sortedData = Object.entries(selectedData)
@@ -40,7 +64,9 @@ const PieChart: React.FC<PieChartProps> = ({ data }) => {
 
   const pieChartData = getPieChartData(labels, values, colors);
   const pieChartOptions = getPieChartOptions(
-    category === "spend" ? "Expenses" : "Earnings"
+    category === "spend" ? "Expenses" : "Earnings",
+    showLegend,
+    legendPosition
   );
 
   return (
@@ -60,10 +86,15 @@ const PieChart: React.FC<PieChartProps> = ({ data }) => {
           >
             {category === "spend" ? "Show Earned" : "Show Spend"}
           </button>
+          <button onClick={toggleLegend}>
+            {!showLegend ? "Show" : "Hide"} legend
+          </button>
         </div>
       </div>
-      <div className={styles.content}>
-        <Pie data={pieChartData} options={pieChartOptions} />
+      <div className={`${styles.content}`}>
+        <div className={styles.piechart}>
+          <Pie data={pieChartData} options={pieChartOptions} />
+        </div>
       </div>
     </div>
   );

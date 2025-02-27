@@ -8,6 +8,7 @@
 .options {
   width: 100%;
   display: inline-flex;
+  align-items: flex-start;
 }
 
 .filtering {
@@ -20,9 +21,11 @@
 }
 
 .filters {
-  display: inline-flex;
-  align-items: flex-end;
-  gap: 25px;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 5px;
+  gap: var(--gutter);
 }
 
 .filtering button {
@@ -39,13 +42,13 @@
 }
 
 .infoBox {
-  min-width: 170px;
   background-color: var(--component-background);
   padding: var(--gutter);
   box-shadow: var(--shadow);
   border-radius: var(--radius);
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: space-between;
   gap: 10px;
 }
 

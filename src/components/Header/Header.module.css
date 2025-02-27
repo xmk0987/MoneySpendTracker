@@ -43,3 +43,17 @@
 .remove:hover {
   color: var(--accent2);
 }
+
+@media only screen and (max-width: 400px) {
+  .headerOptions {
+    gap: 5px;
+  }
+
+  .headerOptions img {
+    display: none;
+  }
+
+  .nav {
+    gap: 5px;
+  }
+}

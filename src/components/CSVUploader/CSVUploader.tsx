@@ -144,8 +144,8 @@ const CsvUpload: React.FC<CsvUploadProps> = ({ setLoading }) => {
   );
 
   return (
-    <>
-      <h1 className="text-xl text-center">Money Spend Tracker</h1>
+    <div className={styles.csvContainer}>
+      <h1 className="text-center">Money Spend Tracker</h1>
       {/* CSV file upload input */}
       {/* Hidden file input */}
       <input
@@ -167,7 +167,7 @@ const CsvUpload: React.FC<CsvUploadProps> = ({ setLoading }) => {
       {/* Once a file is uploaded and headers are parsed, display the mapping form */}
       {csvFile && csvHeaders.length > 0 && (
         <>
-          <h2 className="text-base mt-5">Map CSV Columns to Data Fields</h2>
+          <h2 className="mt-5">Map CSV Columns to Data Fields</h2>
           <form onSubmit={handleSubmit} className={styles.form}>
             {/* Render a dropdown for each required field */}
             {REQUIRED_CSV_FIELDS.map((field) => {
@@ -224,7 +224,7 @@ const CsvUpload: React.FC<CsvUploadProps> = ({ setLoading }) => {
           </p>
         </>
       )}
-    </>
+    </div>
   );
 };
 

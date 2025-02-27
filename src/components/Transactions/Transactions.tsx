@@ -119,6 +119,10 @@ const Transactions: React.FC<TransactionsProps> = ({ data }) => {
 
   return (
     <div className={styles.content}>
+      <div className={styles["infoBox"]}>
+        <p className="text-2l">Total</p>
+        <p className="text-2l">{filteredTotal}</p>
+      </div>
       <div className={styles.options}>
         <div className={styles.filtering}>
           <p>Filtering</p>
@@ -142,10 +146,6 @@ const Transactions: React.FC<TransactionsProps> = ({ data }) => {
           </div>
           <button onClick={handleResetFilters}>Reset Filters</button>
         </div>
-        <div className={styles["infoBox"]}>
-          <p className="text-2l">Total</p>
-          <p className="text-2l">{filteredTotal}</p>
-        </div>
       </div>
       <div className={styles.tableWrapper}>
         <table className={styles.table}>
@@ -156,7 +156,7 @@ const Transactions: React.FC<TransactionsProps> = ({ data }) => {
                   className={styles.headerItem}
                   onClick={() => handleSort("total")}
                 >
-                  Total
+                  Total:
                   {sortField === "total" &&
                     (sortDirection === "desc" ? <ArrowDown /> : <ArrowUp />)}
                 </button>
